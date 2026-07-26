@@ -109,35 +109,29 @@ body {
 .home-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: var(--border-radius-lg);
-  padding: 40px 30px;
+  padding: 45px 35px;
   box-shadow: var(--shadow-lg);
   text-align: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 460px;
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .home-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.6rem;
+  font-size: 2.8rem;
   color: var(--color-rose-dark);
   font-weight: 700;
-}
-
-.home-title span {
-  font-family: 'Sacramento', cursive;
-  font-size: 3.5rem;
-  color: var(--color-rose);
-  display: block;
-  margin-top: -15px;
+  margin-bottom: 5px;
 }
 
 .home-desc {
-  font-size: 1rem;
-  color: #555;
-  margin: 25px 0 35px 0;
-  line-height: 1.6;
+  font-size: 1.15rem;
+  color: #666;
+  margin: 15px 0 30px 0;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
 }
 
 /* --- The Physical Postcard Paper Card --- */
@@ -483,8 +477,8 @@ body {
 }
 
 .card-review-spot, .envelope-review-spot {
-  width: 240px;
-  height: 300px;
+  width: 230px;
+  height: 165px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -492,10 +486,6 @@ body {
   background: rgba(0, 0, 0, 0.15);
   border-radius: var(--border-radius-md);
   border: 1px dashed rgba(255,255,255,0.15);
-}
-
-.envelope-review-spot {
-  height: 180px;
 }
 
 .postcard-card.in-review {
@@ -509,7 +499,7 @@ body {
 .envelope-container.in-review {
   position: absolute;
   display: block;
-  transform: scale(0.46) rotate(2deg);
+  transform: scale(0.42);
   pointer-events: auto;
   z-index: 15;
 }
@@ -604,12 +594,11 @@ body {
   height: 100%;
 }
 
-/* --- Clean 2D Envelope View --- */
+/* --- Fixed & Reliable 2D Envelope Layout --- */
 .envelope-container {
   position: relative;
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 500 / 370;
+  width: 480px;
+  height: 340px;
   z-index: 12;
   display: none;
   cursor: pointer;
@@ -622,54 +611,11 @@ body {
   width: 100%;
   height: 100%;
   background-color: var(--env-bg);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: var(--shadow-md);
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--env-text);
-  padding: 30px;
+  overflow: hidden;
 }
 
-.address-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 75%;
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 1.45rem;
-  border-left: 2px solid rgba(255, 255, 255, 0.4);
-  padding-left: 15px;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  z-index: 2;
-}
-
-/* Envelope Top Right Postage Stamp Spot */
-.envelope-stamp-spot {
-  position: absolute;
-  top: 22px;
-  right: 25px;
-  width: 65px;
-  height: 75px;
-  border: 2px dashed rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.envelope-stamp-spot svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Flaps (2D Flat Envelope) */
 .envelope-flaps {
   position: absolute;
   top: 0;
@@ -681,7 +627,6 @@ body {
 
 .flap {
   position: absolute;
-  background-color: var(--env-bg);
 }
 
 .flap.left {
@@ -689,9 +634,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-top: 185px solid transparent;
-  border-bottom: 185px solid transparent;
-  border-left: 250px solid rgba(255, 255, 255, 0.08);
+  border-top: 170px solid transparent;
+  border-bottom: 170px solid transparent;
+  border-left: 240px solid rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
 
@@ -700,9 +645,9 @@ body {
   right: 0;
   width: 0;
   height: 0;
-  border-top: 185px solid transparent;
-  border-bottom: 185px solid transparent;
-  border-right: 250px solid rgba(255, 255, 255, 0.08);
+  border-top: 170px solid transparent;
+  border-bottom: 170px solid transparent;
+  border-right: 240px solid rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
 
@@ -711,9 +656,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-left: 250px solid transparent;
-  border-right: 250px solid transparent;
-  border-bottom: 200px solid rgba(0, 0, 0, 0.06);
+  border-left: 240px solid transparent;
+  border-right: 240px solid transparent;
+  border-bottom: 180px solid rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
@@ -722,9 +667,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-left: 250px solid transparent;
-  border-right: 250px solid transparent;
-  border-top: 200px solid var(--env-bg-dark);
+  border-left: 240px solid transparent;
+  border-right: 240px solid transparent;
+  border-top: 180px solid var(--env-bg-dark);
   transform-origin: top center;
   transition: transform 0.6s ease;
   z-index: 3;
@@ -735,20 +680,64 @@ body {
   z-index: 0;
 }
 
+/* Address lines centered perfectly */
+.address-lines {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 65%;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.45rem;
+  border-left: 2.5px solid rgba(255, 255, 255, 0.6);
+  padding-left: 15px;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Postage Stamp in Top Right */
+.envelope-stamp-spot {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 60px;
+  height: 70px;
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.envelope-stamp-spot svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* Wax Seal at the center top flap tip */
 .wax-seal {
   position: absolute;
   top: 160px;
-  left: 215px;
-  width: 70px;
-  height: 70px;
-  border-radius: 49% 51% 52% 48% / 51% 52% 48% 49%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
   cursor: pointer;
-  z-index: 4;
+  z-index: 6;
   box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.4),
-    inset -4px -4px 8px rgba(0,0,0,0.3),
-    inset 4px 4px 8px rgba(255,255,255,0.2);
+    0 4px 10px rgba(0, 0, 0, 0.4),
+    inset -3px -3px 6px rgba(0,0,0,0.3),
+    inset 3px 3px 6px rgba(255,255,255,0.25);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -916,7 +905,7 @@ dialog::backdrop {
   }
 
   .envelope-container.in-review {
-    transform: scale(0.38) rotate(2deg);
+    transform: scale(0.38);
   }
   
   .postcard-card {
@@ -937,14 +926,15 @@ dialog::backdrop {
   }
   
   .envelope-container {
-    width: 95%;
+    width: 320px;
+    height: 220px;
   }
 
-  .flap.left { border-width: 140px 0 140px 185px; }
-  .flap.right { border-width: 140px 185px 140px 0; }
-  .flap.bottom { border-width: 0 185px 150px 185px; }
-  .flap.top { border-width: 150px 185px 0 185px; }
-  .wax-seal { top: 125px; left: 150px; }
+  .flap.left { border-width: 110px 0 110px 160px; }
+  .flap.right { border-width: 110px 160px 110px 0; }
+  .flap.bottom { border-width: 0 160px 120px 160px; }
+  .flap.top { border-width: 120px 160px 0 160px; }
+  .wax-seal { top: 105px; width: 50px; height: 50px; }
   
   .toolbar-row {
     flex-direction: column;

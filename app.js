@@ -457,7 +457,7 @@
       function endDrag() {
         el.classList.remove('dragging');
         window.removeEventListener('mousemove', onDrag);
-        window.removeEventListener('mouseup', endDrag);
+        window.removeEventListener('mouseup', onDrag);
         window.removeEventListener('touchmove', onDrag);
         window.removeEventListener('touchend', endDrag);
       }

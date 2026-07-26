@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with 100% Transparent Stickers
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Unique SVG Instance Scoping
 
 (function() {
   
@@ -16,8 +16,6 @@
     isRecipientView: false,      // true if loading a postcard from URL
     isOpening: false             // lock flag during open animation
   };
-
-  const SVG_CACHE = {};          // SVG markup lookup table
 
   // Transparent Cute Vector Stickers for the Letter Card
   const STICKERS_LIST = [
@@ -57,7 +55,6 @@
   // --- Initializer ---
   document.addEventListener('DOMContentLoaded', () => {
     initDOMElements();
-    cacheSVGs();
     setupEventListeners();
     setupCanvas();
     populateToolbar();
@@ -95,11 +92,24 @@
     toastNotification = document.getElementById('toast-notification');
   }
 
-  function cacheSVGs() {
-    STICKERS_LIST.forEach(s => {
-      const el = document.getElementById(s.id);
-      if (el) SVG_CACHE[s.id] = el.outerHTML;
+  // Generate Unique Instance Markup for SVGs to eliminate gradient/filter ID conflicts
+  function getUniqueSVGMarkup(stickerId) {
+    const templateEl = document.getElementById(stickerId);
+    if (!templateEl) return '';
+    
+    const uniqueId = 'stk_' + Math.random().toString(36).substr(2, 7);
+    let html = templateEl.outerHTML;
+    
+    // Replace IDs and url(#id) references
+    html = html.replace(/id="([^"]+)"/g, (m, idStr) => {
+      if (idStr === stickerId) return '';
+      return `id="${idStr}_${uniqueId}"`;
     });
+    html = html.replace(/url\(#([^)]+)\)/g, (m, idStr) => {
+      return `url(#${idStr}_${uniqueId})`;
+    });
+    
+    return html;
   }
 
   function setupEventListeners() {
@@ -225,10 +235,7 @@
       stampThumb.className = 'stamp-thumb';
       stampThumb.dataset.id = sticker.id;
       stampThumb.title = sticker.label;
-      
-      if (SVG_CACHE[sticker.id]) {
-        stampThumb.innerHTML = SVG_CACHE[sticker.id];
-      }
+      stampThumb.innerHTML = getUniqueSVGMarkup(sticker.id);
       
       stampThumb.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -419,14 +426,14 @@
 
   // --- Ultra-Smooth Sticker Manager with Pointer Events ---
   function placeStampOnCard(stickerId) {
-    const svgContent = SVG_CACHE[stickerId];
-    if (!svgContent) return;
+    const svgMarkup = getUniqueSVGMarkup(stickerId);
+    if (!svgMarkup) return;
     
     const stampEl = document.createElement('div');
     stampEl.className = 'placed-stamp';
     stampEl.dataset.id = stickerId;
     stampEl.innerHTML = `
-      ${svgContent}
+      ${svgMarkup}
       <div class="stamp-btn stamp-del-btn"><i class="fas fa-times"></i></div>
       <div class="stamp-btn stamp-rot-btn"><i class="fas fa-sync-alt"></i></div>
     `;
@@ -744,16 +751,16 @@
     document.getElementById('input-to').value = to;
     document.getElementById('input-from').value = from;
 
-    // Load card stickers
+    // Load card stickers with unique instance scoping
     stampsOverlay.innerHTML = '';
     state.stamps = [];
     if (data.st) {
       data.st.forEach(sData => {
-        const svgContent = SVG_CACHE[sData.id];
-        if (svgContent) {
+        const svgMarkup = getUniqueSVGMarkup(sData.id);
+        if (svgMarkup) {
           const stampEl = document.createElement('div');
           stampEl.className = 'placed-stamp';
-          stampEl.innerHTML = svgContent;
+          stampEl.innerHTML = svgMarkup;
           stampEl.style.left = `${sData.x}%`;
           stampEl.style.top = `${sData.y}%`;
           stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
@@ -949,11 +956,11 @@
     // 4. Render Draggable Transparent Vector Stickers
     const stampPromises = state.stamps.map(stamp => {
       return new Promise((resolve) => {
-        const svgContent = SVG_CACHE[stamp.id];
-        if (!svgContent) return resolve();
+        const svgMarkup = getUniqueSVGMarkup(stamp.id);
+        if (!svgMarkup) return resolve();
         
         const parser = new DOMParser();
-        const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+        const doc = parser.parseFromString(svgMarkup, 'image/svg+xml');
         const svgEl = doc.querySelector('svg');
         svgEl.setAttribute('width', '100');
         svgEl.setAttribute('height', '100');

@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with 3D Envelope Flip & Recipient Reveal Sequence
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Mobile Safari Centered Mailing Animation
 
 (function() {
   
@@ -576,6 +576,12 @@
   function transitionToReview() {
     deselectAllStamps();
 
+    document.querySelector('.previews-container').style.display = 'flex';
+    document.querySelector('.review-form').style.display = 'flex';
+
+    postcardCard.removeAttribute('style');
+    envelopeContainer.removeAttribute('style');
+
     cardReviewSpot.appendChild(postcardCard);
     postcardCard.className = 'postcard-card in-review';
 
@@ -599,6 +605,9 @@
   }
 
   function backToEditor() {
+    postcardCard.removeAttribute('style');
+    envelopeContainer.removeAttribute('style');
+
     document.getElementById('view-editor').insertBefore(postcardCard, document.querySelector('.postcard-toolbar'));
     postcardCard.className = 'postcard-card';
     
@@ -612,26 +621,44 @@
     resizeCanvas();
   }
 
-  // --- MAILING ANIMATION FLOW ---
+  // --- MOBILE SAFARI PERFECTLY CENTERED MAILING ANIMATION FLOW ---
   function triggerMailingAnimation() {
     document.querySelector('.review-form').style.display = 'none';
+    document.querySelector('.previews-container').style.display = 'none';
     
-    document.getElementById('view-review-desk').appendChild(postcardCard);
-    document.getElementById('view-review-desk').appendChild(envelopeContainer);
+    const reviewDesk = document.getElementById('view-review-desk');
+    reviewDesk.appendChild(postcardCard);
+    reviewDesk.appendChild(envelopeContainer);
+    
+    const screenWidth = window.innerWidth;
+    const baseScale = screenWidth < 540 ? Math.min(0.72, (screenWidth - 30) / 500) : 1;
     
     postcardCard.className = 'postcard-card';
     envelopeContainer.className = 'envelope-container';
     
-    postcardCard.style.position = 'absolute';
-    postcardCard.style.transform = 'scale(1) translateY(0)';
+    // Explicit fixed viewport centering for Mobile Safari & iPhone
+    postcardCard.style.position = 'fixed';
+    postcardCard.style.top = '50%';
+    postcardCard.style.left = '50%';
+    postcardCard.style.margin = '0';
+    postcardCard.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
+    postcardCard.style.zIndex = '10';
+    postcardCard.style.display = 'flex';
+    postcardCard.style.opacity = '1';
     
-    envelopeContainer.style.position = 'absolute';
-    envelopeContainer.style.transform = 'scale(1) translateY(0)';
+    envelopeContainer.style.position = 'fixed';
+    envelopeContainer.style.top = '50%';
+    envelopeContainer.style.left = '50%';
+    envelopeContainer.style.margin = '0';
+    envelopeContainer.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
+    envelopeContainer.style.zIndex = '12';
+    envelopeContainer.style.display = 'block';
+    envelopeContainer.style.opacity = '1';
 
     setTimeout(() => {
       // 1. Card slides down behind envelope
       postcardCard.style.transition = 'all 0.9s ease-in-out';
-      postcardCard.style.transform = 'translateY(200px) scale(0.48)';
+      postcardCard.style.transform = `translate(-50%, calc(-50% + 180px)) scale(${baseScale * 0.48})`;
       postcardCard.style.opacity = '0';
 
       setTimeout(() => {
@@ -659,7 +686,7 @@
             // 5. Envelope flies off screen
             setTimeout(() => {
               envelopeContainer.style.transition = 'all 1.1s var(--spring-easing)';
-              envelopeContainer.style.transform = 'translateY(-1000px) scale(0.4)';
+              envelopeContainer.style.transform = `translate(-50%, -1000px) scale(${baseScale * 0.4})`;
               envelopeContainer.style.opacity = '0';
               
               setTimeout(openShareDialog, 1000);

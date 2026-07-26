@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=90">
+  <link rel="stylesheet" href="styles.css?v=100">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,7 +53,7 @@
           <!-- Mode Toggle: Type vs Draw -->
           <div class="mode-toggle-group">
             <button id="btn-mode-text" class="mode-btn active" title="Type & Edit Text">
-              <i class="fas fa-font"></i> Type Text
+              <i class="fas fa-font"></i> Type
             </button>
             <button id="btn-mode-draw" class="mode-btn" title="Draw Doodles">
               <i class="fas fa-pen-nib"></i> Draw
@@ -70,7 +70,7 @@
             <!-- JS Populated -->
           </div>
 
-          <button id="btn-clear-canvas" class="btn btn-outline btn-sm">
+          <button id="btn-clear-canvas" class="btn btn-outline btn-sm" title="Clear Doodles">
             <i class="fas fa-trash-alt"></i> Clear
           </button>
         </div>
@@ -220,7 +220,7 @@
     
     <!-- STAMP 1: Heart Retro -->
     <svg id="stamp-heart" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#fff5f6" stroke="#e27396" stroke-width="2"/>
       <path d="M 50,75 C 20,55 25,30 50,45 C 75,30 80,55 50,75 Z" fill="#e27396" stroke="none" />
       <text x="50" y="28" font-family="'Outfit', sans-serif" font-weight="800" font-size="10" fill="#800f2f" text-anchor="middle">MAIL</text>
@@ -248,19 +248,8 @@
       <text x="50" y="86" font-family="'Outfit', sans-serif" font-weight="600" font-size="8" fill="#e27396" text-anchor="middle">POST CARD</text>
     </svg>
 
-    <!-- STAMP 4: High-Contrast White Postmark -->
-    <svg id="stamp-postmark" viewBox="0 0 100 100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.5">
-      <circle cx="50" cy="50" r="32" stroke-dasharray="10 2 2 2"/>
-      <circle cx="50" cy="50" r="26" />
-      <text x="50" y="44" font-family="'Playfair Display', serif" font-weight="bold" font-size="6" fill="rgba(255,255,255,0.95)" text-anchor="middle">EXPRESS MAIL</text>
-      <text x="50" y="52" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">25 JUL 2026</text>
-      <text x="50" y="60" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">★ MAIL ★</text>
-      <path d="M 5,25 Q 20,30 35,25 T 65,25 T 95,25" />
-      <path d="M 5,75 Q 20,80 35,75 T 65,75 T 95,75" />
-    </svg>
-
   </div>
 
-  <script src="app.js?v=90"></script>
+  <script src="app.js?v=100"></script>
 </body>
 </html>

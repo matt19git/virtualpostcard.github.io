@@ -19,12 +19,11 @@
 
   const STAMP_SVGS = {};         // SVG elements lookup table for canvas exports
 
-  // Core Stamps Tray configuration
+  // Core Stamps Tray configuration (Heart, Pigeon, Flower)
   const STAMPS_LIST = [
     { id: 'stamp-heart', label: 'Heart' },
     { id: 'stamp-pigeon', label: 'Pigeon' },
-    { id: 'stamp-flower', label: 'Flower' },
-    { id: 'stamp-postmark', label: 'Postmark' }
+    { id: 'stamp-flower', label: 'Flower' }
   ];
 
   // Colors available for pen

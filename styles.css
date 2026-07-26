@@ -670,7 +670,7 @@ body {
   background: rgba(255,255,255,0.4);
 }
 
-/* --- REALISTIC 2D ENVELOPE: FRONT & BACK SIDES --- */
+/* --- REALISTIC 3D ENVELOPE FLIP: FRONT & BACK SIDES --- */
 .envelope-container {
   position: relative;
   width: min(500px, 94vw);
@@ -680,6 +680,7 @@ body {
   display: none;
   cursor: pointer;
   pointer-events: auto;
+  perspective: 1000px;
   transition: transform 0.8s var(--spring-easing), opacity 0.5s ease;
   margin: 0 auto;
 }
@@ -690,7 +691,12 @@ body {
   height: 100%;
   border-radius: 12px;
   box-shadow: var(--shadow-md);
-  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--spring-easing);
+}
+
+.envelope.show-back {
+  transform: rotateY(180deg);
 }
 
 .envelope-side {
@@ -701,30 +707,20 @@ body {
   height: 100%;
   background-color: var(--env-bg);
   border-radius: 12px;
-  transition: opacity 0.4s ease;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Front Side: Clean Envelope Face with Address & Top-Right Stamp */
 .envelope-front-side {
   z-index: 2;
-  opacity: 1;
+  transform: rotateY(0deg);
 }
 
 /* Back Side: Envelope Flaps & Center Wax Seal */
 .envelope-back-side {
   z-index: 1;
-  opacity: 0;
-}
-
-.envelope.show-back .envelope-front-side {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.envelope.show-back .envelope-back-side {
-  opacity: 1;
-  z-index: 3;
-  pointer-events: auto;
+  transform: rotateY(180deg);
 }
 
 .envelope-flaps {

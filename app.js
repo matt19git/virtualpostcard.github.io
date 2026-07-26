@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Realistic Front & Back Envelope Sides
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with 3D Envelope Flip & Recipient Reveal Sequence
 
 (function() {
   
@@ -149,7 +149,7 @@
     document.getElementById('btn-email-link').addEventListener('click', emailShareLink);
     document.getElementById('btn-download-postcard').addEventListener('click', downloadPostcardImage);
 
-    // Recipient View: Click ANYWHERE on envelope container to open letter!
+    // Recipient View: Click ANYWHERE on envelope container to flip & open letter!
     envelopeContainer.addEventListener('click', () => {
       if (state.isRecipientView) {
         crackSealAndReveal();
@@ -637,7 +637,7 @@
       setTimeout(() => {
         postcardCard.style.display = 'none';
 
-        // 2. Flip envelope to show BACK FLAP & WAX SEAL
+        // 2. Flip envelope 3D to show BACK FLAP & WAX SEAL
         envelopeEl.classList.add('show-back');
 
         // 3. Top flap folds down
@@ -797,7 +797,9 @@
 
     viewRecipient.insertBefore(envelopeContainer, document.getElementById('recipient-action-panel'));
 
-    envelopeEl.classList.add('show-back'); // Recipient sees sealed BACK side with Wax Seal!
+    // RECIPIENT INITIALLY SEES FRONT SIDE (To/From Addresses + Postage Stamp)
+    envelopeEl.classList.remove('show-back');
+    envelopeEl.classList.remove('open');
 
     waxSealEl.className = 'wax-seal';
     waxSealEl.classList.remove('broken');
@@ -806,7 +808,6 @@
     
     const topFlap = envelopeEl.querySelector('.flap.top');
     topFlap.removeAttribute('style');
-    envelopeEl.classList.remove('open');
 
     envelopeContainer.removeAttribute('style');
     envelopeContainer.style.display = 'block';
@@ -820,48 +821,57 @@
     resizeCanvas();
   }
 
-  // --- Crack Seal and slide out letter ---
+  // --- Recipient Action: 3D Flip -> Crack Wax Seal -> Open Flap -> Reveal Letter ---
   function crackSealAndReveal() {
     if (!state.isRecipientView || state.isOpening) return;
     state.isOpening = true;
     
-    waxSealEl.classList.add('broken');
     recipientHelpText.style.display = 'none';
 
+    // 1. Smooth 3D Flip Envelope from Front to Back
+    envelopeEl.classList.add('show-back');
+
     setTimeout(() => {
-      waxSealEl.style.display = 'none';
-      
-      envelopeEl.classList.add('open');
-      const topFlap = envelopeEl.querySelector('.flap.top');
-      topFlap.style.transform = 'rotateX(180deg)';
-      topFlap.style.zIndex = '0';
+      // 2. Crack open Wax Seal on back flap
+      waxSealEl.classList.add('broken');
 
       setTimeout(() => {
-        viewRecipient.insertBefore(postcardCard, document.getElementById('recipient-action-panel'));
-        postcardCard.style.display = 'flex';
-        postcardCard.style.position = 'relative';
-        postcardCard.style.transform = 'translateY(120px) scale(0.7)';
-        postcardCard.style.opacity = '0';
-        resizeCanvas();
+        waxSealEl.style.display = 'none';
+        
+        // 3. Open top flap
+        envelopeEl.classList.add('open');
+        const topFlap = envelopeEl.querySelector('.flap.top');
+        topFlap.style.transform = 'rotateX(180deg)';
+        topFlap.style.zIndex = '0';
 
         setTimeout(() => {
-          postcardCard.style.transition = 'all 1.0s var(--spring-easing)';
-          postcardCard.style.transform = 'translateY(0) scale(1)';
-          postcardCard.style.opacity = '1';
-          postcardCard.style.zIndex = '20';
+          // 4. Letter card slides out smoothly
+          viewRecipient.insertBefore(postcardCard, document.getElementById('recipient-action-panel'));
+          postcardCard.style.display = 'flex';
+          postcardCard.style.position = 'relative';
+          postcardCard.style.transform = 'translateY(120px) scale(0.7)';
+          postcardCard.style.opacity = '0';
+          resizeCanvas();
 
-          envelopeContainer.style.transition = 'all 0.8s ease';
-          envelopeContainer.style.transform = 'scale(0.8) translateY(100px)';
-          envelopeContainer.style.opacity = '0';
-          
           setTimeout(() => {
-            envelopeContainer.style.display = 'none';
-            document.getElementById('recipient-action-panel').style.display = 'flex';
-          }, 800);
+            postcardCard.style.transition = 'all 1.0s var(--spring-easing)';
+            postcardCard.style.transform = 'translateY(0) scale(1)';
+            postcardCard.style.opacity = '1';
+            postcardCard.style.zIndex = '20';
 
-        }, 50);
-      }, 500);
-    }, 400);
+            envelopeContainer.style.transition = 'all 0.8s ease';
+            envelopeContainer.style.transform = 'scale(0.8) translateY(100px)';
+            envelopeContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+              envelopeContainer.style.display = 'none';
+              document.getElementById('recipient-action-panel').style.display = 'flex';
+            }, 800);
+
+          }, 50);
+        }, 500);
+      }, 400);
+    }, 800); // 800ms duration for 3D flip
   }
 
   // --- Action Dialog Comms ---

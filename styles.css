@@ -81,14 +81,14 @@ body {
 .main-view-wrapper {
   position: relative;
   width: 100%;
-  max-width: 680px;
+  max-width: 760px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10;
-  padding: 20px 15px;
+  padding: 24px 16px;
   margin: 0 auto;
 }
 
@@ -114,7 +114,7 @@ body {
   padding: 50px 40px;
   box-shadow: var(--shadow-lg);
   text-align: center;
-  width: min(500px, 94vw);
+  width: min(540px, 94vw);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.4);
   margin: 0 auto;
@@ -122,14 +122,14 @@ body {
 
 .home-title {
   font-family: 'Playfair Display', serif;
-  font-size: 3rem;
+  font-size: 3.2rem;
   color: var(--color-rose-dark);
   font-weight: 700;
   margin-bottom: 5px;
 }
 
 .home-desc {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   color: #666;
   margin: 15px 0 35px 0;
   font-family: 'Playfair Display', serif;
@@ -139,9 +139,9 @@ body {
 /* --- The Physical Postcard Paper Card (Full Sheet Draw & Type) --- */
 .postcard-card {
   position: relative;
-  width: min(500px, 94vw);
-  height: calc(min(500px, 94vw) * 1.15);
-  max-height: 580px;
+  width: min(540px, 94vw);
+  height: calc(min(540px, 94vw) * 1.15);
+  max-height: 620px;
   background-color: var(--color-paper-cream);
   border-radius: 8px;
   box-shadow: 
@@ -177,13 +177,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 32px;
+  padding: 34px;
   background: transparent;
   border: none;
   outline: none;
   resize: none;
   font-family: 'Caveat', cursive;
-  font-size: 1.85rem;
+  font-size: 1.95rem;
   line-height: 1.5;
   color: var(--color-charcoal);
   z-index: 1;
@@ -218,8 +218,8 @@ body {
 
 .placed-stamp {
   position: absolute;
-  width: 85px;
-  height: 85px;
+  width: 88px;
+  height: 88px;
   pointer-events: auto;
   cursor: grab;
   transform-origin: center center;
@@ -304,7 +304,7 @@ body {
 /* --- Core Toolbar Below the Card --- */
 .postcard-toolbar {
   position: relative;
-  width: min(500px, 94vw);
+  width: min(540px, 94vw);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -531,8 +531,8 @@ body {
 
 /* Proportional Matching Preview Containers */
 .card-review-spot {
-  width: 220px;
-  height: 253px;
+  width: 230px;
+  height: 264px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -544,8 +544,8 @@ body {
 }
 
 .envelope-review-spot {
-  width: 220px;
-  height: 154px;
+  width: 230px;
+  height: 161px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -560,7 +560,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.435);
+  transform: translate(-50%, -50%) scale(0.425);
   box-shadow: var(--shadow-lg);
   pointer-events: none;
   z-index: 15;
@@ -571,7 +571,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.435);
+  transform: translate(-50%, -50%) scale(0.425);
   pointer-events: auto;
   z-index: 15;
   margin: 0;
@@ -583,7 +583,7 @@ body {
   border-radius: var(--border-radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-lg);
-  width: min(500px, 94vw);
+  width: min(540px, 94vw);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -673,9 +673,9 @@ body {
 /* --- REALISTIC 3D ENVELOPE FLIP: FRONT & BACK SIDES --- */
 .envelope-container {
   position: relative;
-  width: min(500px, 94vw);
-  height: calc(min(500px, 94vw) * 0.7);
-  max-height: 350px;
+  width: min(540px, 94vw);
+  height: calc(min(540px, 94vw) * 0.7);
+  max-height: 380px;
   z-index: 12;
   display: none;
   cursor: pointer;
@@ -741,9 +741,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-top: 175px solid transparent;
-  border-bottom: 175px solid transparent;
-  border-left: 250px solid rgba(255, 255, 255, 0.1);
+  border-top: 190px solid transparent;
+  border-bottom: 190px solid transparent;
+  border-left: 270px solid rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
 
@@ -752,9 +752,9 @@ body {
   right: 0;
   width: 0;
   height: 0;
-  border-top: 175px solid transparent;
-  border-bottom: 175px solid transparent;
-  border-right: 250px solid rgba(255, 255, 255, 0.1);
+  border-top: 190px solid transparent;
+  border-bottom: 190px solid transparent;
+  border-right: 270px solid rgba(255, 255, 255, 0.1);
   z-index: 1;
 }
 
@@ -763,9 +763,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-left: 250px solid transparent;
-  border-right: 250px solid transparent;
-  border-bottom: 185px solid rgba(0, 0, 0, 0.08);
+  border-left: 270px solid transparent;
+  border-right: 270px solid transparent;
+  border-bottom: 200px solid rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
@@ -774,9 +774,9 @@ body {
   left: 0;
   width: 0;
   height: 0;
-  border-left: 250px solid transparent;
-  border-right: 250px solid transparent;
-  border-top: 185px solid var(--env-bg-dark);
+  border-left: 270px solid transparent;
+  border-right: 270px solid transparent;
+  border-top: 200px solid var(--env-bg-dark);
   transform-origin: top center;
   transition: transform 0.6s ease;
   z-index: 3;
@@ -791,7 +791,7 @@ body {
 .address-lines {
   position: absolute;
   top: 50%;
-  left: 35px;
+  left: 38px;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -799,7 +799,7 @@ body {
   width: 65%;
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   border-left: 2.5px solid rgba(255, 255, 255, 0.6);
   padding-left: 16px;
   color: white;
@@ -811,10 +811,10 @@ body {
 /* Front Side: Real Postage Stamp in Top Right */
 .envelope-stamp-spot {
   position: absolute;
-  top: 18px;
-  right: 22px;
-  width: 70px;
-  height: 80px;
+  top: 20px;
+  right: 24px;
+  width: 74px;
+  height: 84px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -834,11 +834,11 @@ body {
 /* Back Side: Wax Seal at the center top flap tip */
 .wax-seal {
   position: absolute;
-  top: 165px;
+  top: 175px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
-  height: 70px;
+  width: 74px;
+  height: 74px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 6;
@@ -991,7 +991,63 @@ dialog::backdrop {
   to { opacity: 1; }
 }
 
-/* --- Responsive Adaptations --- */
+/* --- Desktop Enlarged Layout (Computer Displays) --- */
+@media (min-width: 768px) {
+  .main-view-wrapper {
+    max-width: 880px;
+    padding: 32px 24px;
+  }
+
+  .home-card {
+    width: 600px;
+    padding: 64px 54px;
+  }
+
+  .postcard-card {
+    width: 580px;
+    height: 667px;
+    max-height: none;
+  }
+
+  .postcard-textarea {
+    font-size: 2.15rem;
+    padding: 38px;
+  }
+
+  .postcard-toolbar {
+    width: 580px;
+  }
+
+  .review-form {
+    width: 580px;
+  }
+
+  .envelope-container {
+    width: 580px;
+    height: 406px;
+    max-height: none;
+  }
+
+  .card-review-spot {
+    width: 250px;
+    height: 288px;
+  }
+
+  .envelope-review-spot {
+    width: 250px;
+    height: 175px;
+  }
+
+  .postcard-card.in-review {
+    transform: translate(-50%, -50%) scale(0.43);
+  }
+
+  .envelope-container.in-review {
+    transform: translate(-50%, -50%) scale(0.43);
+  }
+}
+
+/* --- Mobile Responsive Adaptations --- */
 @media (max-width: 540px) {
   .previews-container {
     flex-direction: row;

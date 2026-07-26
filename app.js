@@ -1,4 +1,4 @@
-// app.js - Cute Stickers on Card & Real Vintage Postage Stamps on Envelope
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with 100% Transparent Stickers
 
 (function() {
   
@@ -17,11 +17,14 @@
     isOpening: false             // lock flag during open animation
   };
 
-  // Cute Stickers for the Letter Card
+  const SVG_CACHE = {};          // SVG markup lookup table
+
+  // Transparent Cute Vector Stickers for the Letter Card
   const STICKERS_LIST = [
-    { id: 'sticker-heart', label: 'Cute Heart Sticker', src: 'assets/stickers/sticker_heart.png' },
-    { id: 'sticker-sparkles', label: 'Gold Sparkles Sticker', src: 'assets/stickers/sticker_sparkles.png' },
-    { id: 'sticker-daisy', label: 'Pink Daisy Flower Sticker', src: 'assets/stickers/sticker_daisy.png' }
+    { id: 'sticker-heart', label: 'Glossy Heart Sticker' },
+    { id: 'sticker-sparkles', label: 'Gold Sparkles Sticker' },
+    { id: 'sticker-flower', label: 'Pink Blossom Sticker' },
+    { id: 'sticker-coffee', label: 'Cute Coffee Mug Sticker' }
   ];
 
   // Real Vintage Postage Stamps for Envelope
@@ -55,6 +58,7 @@
   // --- Initializer ---
   document.addEventListener('DOMContentLoaded', () => {
     initDOMElements();
+    cacheSVGs();
     setupEventListeners();
     setupCanvas();
     populateToolbar();
@@ -90,6 +94,13 @@
     
     shareModal = document.getElementById('share-modal');
     toastNotification = document.getElementById('toast-notification');
+  }
+
+  function cacheSVGs() {
+    STICKERS_LIST.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) SVG_CACHE[s.id] = el.outerHTML;
+    });
   }
 
   function setupEventListeners() {
@@ -138,12 +149,7 @@
     });
 
     // De-select stamps when clicking blank card areas
-    postcardCard.addEventListener('mousedown', (e) => {
-      if (e.target === canvas || e.target === postcardCard || e.target === stampsOverlay) {
-        deselectAllStamps();
-      }
-    });
-    postcardCard.addEventListener('touchstart', (e) => {
+    postcardCard.addEventListener('pointerdown', (e) => {
       if (e.target === canvas || e.target === postcardCard || e.target === stampsOverlay) {
         deselectAllStamps();
       }
@@ -189,7 +195,7 @@
     }
   }
 
-  // --- Populate Colors and Cute Stickers UI ---
+  // --- Populate Colors and Transparent Stickers UI ---
   function populateToolbar() {
     // Colors
     const paletteContainer = document.getElementById('colors-palette');
@@ -213,14 +219,17 @@
       paletteContainer.appendChild(dot);
     });
 
-    // Cute Stickers Tray for Card
+    // Transparent Stickers Tray for Card
     stampsTray.innerHTML = '';
     STICKERS_LIST.forEach(sticker => {
       const stampThumb = document.createElement('div');
       stampThumb.className = 'stamp-thumb';
       stampThumb.dataset.id = sticker.id;
       stampThumb.title = sticker.label;
-      stampThumb.innerHTML = `<img src="${sticker.src}" alt="${sticker.label}">`;
+      
+      if (SVG_CACHE[sticker.id]) {
+        stampThumb.innerHTML = SVG_CACHE[sticker.id];
+      }
       
       stampThumb.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -409,28 +418,31 @@
     }
   }
 
-  // --- Cute Sticker Manager (Draggable on Card) ---
+  // --- Ultra-Smooth Sticker Manager with Pointer Events ---
   function placeStampOnCard(stickerId) {
-    const stickerData = STICKERS_LIST.find(s => s.id === stickerId) || STICKERS_LIST[0];
+    const svgContent = SVG_CACHE[stickerId];
+    if (!svgContent) return;
     
     const stampEl = document.createElement('div');
     stampEl.className = 'placed-stamp';
     stampEl.dataset.id = stickerId;
     stampEl.innerHTML = `
-      <img src="${stickerData.src}" alt="${stickerData.label}">
+      ${svgContent}
       <div class="stamp-btn stamp-del-btn"><i class="fas fa-times"></i></div>
       <div class="stamp-btn stamp-rot-btn"><i class="fas fa-sync-alt"></i></div>
     `;
 
-    const x = 40 + Math.random() * 10;
-    const y = 30 + Math.random() * 10;
+    // Center place with slight random tilt
+    const x = 42 + Math.random() * 8;
+    const y = 32 + Math.random() * 8;
+    const initialRot = Math.round((Math.random() - 0.5) * 12);
 
     const stampObj = {
       id: stickerId,
       x: x,
       y: y,
       scale: 1.0,
-      rotation: 0,
+      rotation: initialRot,
       el: stampEl
     };
 
@@ -439,74 +451,67 @@
     
     selectStamp(stampObj);
     updateStampCSS(stampObj);
-    bindStampHandlers(stampObj);
+    bindStampPointerHandlers(stampObj);
   }
 
-  function bindStampHandlers(stampObj) {
+  function bindStampPointerHandlers(stampObj) {
     const el = stampObj.el;
     
-    el.addEventListener('mousedown', startDrag);
-    el.addEventListener('touchstart', startDrag, { passive: false });
+    // Smooth Pointer events dragging (Handles Mouse, Touch, Stylus seamlessly)
+    el.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.stamp-btn')) return;
+      e.stopPropagation();
+      selectStamp(stampObj);
 
-    el.querySelector('.stamp-del-btn').addEventListener('click', (e) => {
+      const cardRect = postcardCard.getBoundingClientRect();
+      const startXPct = stampObj.x;
+      const startYPct = stampObj.y;
+      const originX = e.clientX;
+      const originY = e.clientY;
+
+      el.classList.add('dragging');
+      el.setPointerCapture(e.pointerId);
+
+      function onPointerMove(pEv) {
+        const dx = pEv.clientX - originX;
+        const dy = pEv.clientY - originY;
+
+        stampObj.x = startXPct + (dx / cardRect.width) * 100;
+        stampObj.y = startYPct + (dy / cardRect.height) * 100;
+
+        stampObj.x = Math.max(2, Math.min(98, stampObj.x));
+        stampObj.y = Math.max(2, Math.min(98, stampObj.y));
+
+        updateStampCSS(stampObj);
+      }
+
+      function onPointerUp(pEv) {
+        el.classList.remove('dragging');
+        try { el.releasePointerCapture(pEv.pointerId); } catch(err){}
+        el.removeEventListener('pointermove', onPointerMove);
+        el.removeEventListener('pointerup', onPointerUp);
+        el.removeEventListener('pointercancel', onPointerUp);
+      }
+
+      el.addEventListener('pointermove', onPointerMove);
+      el.addEventListener('pointerup', onPointerUp);
+      el.addEventListener('pointercancel', onPointerUp);
+    });
+
+    // Delete Button
+    el.querySelector('.stamp-del-btn').addEventListener('pointerdown', (e) => {
       e.stopPropagation();
       el.remove();
       state.stamps = state.stamps.filter(s => s !== stampObj);
       if (state.selectedStamp === stampObj) state.selectedStamp = null;
     });
 
-    el.querySelector('.stamp-rot-btn').addEventListener('mousedown', startRotateScale);
-    el.querySelector('.stamp-rot-btn').addEventListener('touchstart', startRotateScale, { passive: false });
-
-    function startDrag(e) {
+    // Rotate and Scale Handle
+    el.querySelector('.stamp-rot-btn').addEventListener('pointerdown', (e) => {
       e.stopPropagation();
-      selectStamp(stampObj);
-      
-      const clientX = e.clientX || e.touches[0].clientX;
-      const clientY = e.clientY || e.touches[0].clientY;
-      const cardRect = postcardCard.getBoundingClientRect();
-      
-      const startXPct = stampObj.x;
-      const startYPct = stampObj.y;
-      const originX = clientX;
-      const originY = clientY;
+      const handleEl = e.target.closest('.stamp-rot-btn');
+      handleEl.setPointerCapture(e.pointerId);
 
-      el.classList.add('dragging');
-
-      function onDrag(mEv) {
-        const cx = mEv.clientX || (mEv.touches && mEv.touches[0].clientX);
-        const cy = mEv.clientY || (mEv.touches && mEv.touches[0].clientY);
-        
-        const dx = cx - originX;
-        const dy = cy - originY;
-
-        stampObj.x = startXPct + (dx / cardRect.width) * 100;
-        stampObj.y = startYPct + (dy / cardRect.height) * 100;
-
-        stampObj.x = Math.max(0, Math.min(100, stampObj.x));
-        stampObj.y = Math.max(0, Math.min(100, stampObj.y));
-
-        updateStampCSS(stampObj);
-      }
-
-      function endDrag() {
-        el.classList.remove('dragging');
-        window.removeEventListener('mousemove', onDrag);
-        window.removeEventListener('mouseup', onDrag);
-        window.removeEventListener('touchmove', onDrag);
-        window.removeEventListener('touchend', endDrag);
-      }
-
-      window.addEventListener('mousemove', onDrag);
-      window.addEventListener('mouseup', endDrag);
-      window.addEventListener('touchmove', onDrag, { passive: false });
-      window.addEventListener('touchend', endDrag);
-    }
-
-    function startRotateScale(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      
       const elRect = el.getBoundingClientRect();
       const center = {
         x: elRect.left + elRect.width / 2,
@@ -515,22 +520,15 @@
 
       const startRot = stampObj.rotation;
       const startScale = stampObj.scale;
-      
-      const clientX = e.clientX || e.touches[0].clientX;
-      const clientY = e.clientY || e.touches[0].clientY;
-      
-      const startDist = Math.hypot(clientX - center.x, clientY - center.y);
-      const startAngle = Math.atan2(clientY - center.y, clientX - center.x);
+      const startDist = Math.hypot(e.clientX - center.x, e.clientY - center.y);
+      const startAngle = Math.atan2(e.clientY - center.y, e.clientX - center.x);
 
-      function onRotateScale(mEv) {
-        const cx = mEv.clientX || (mEv.touches && mEv.touches[0].clientX);
-        const cy = mEv.clientY || (mEv.touches && mEv.touches[0].clientY);
-        
-        const curDist = Math.hypot(cx - center.x, cy - center.y);
-        const curAngle = Math.atan2(cy - center.y, cx - center.x);
+      function onRotateMove(pEv) {
+        const curDist = Math.hypot(pEv.clientX - center.x, pEv.clientY - center.y);
+        const curAngle = Math.atan2(pEv.clientY - center.y, pEv.clientX - center.x);
 
         stampObj.scale = startScale * (curDist / startDist);
-        stampObj.scale = Math.max(0.5, Math.min(2.5, stampObj.scale));
+        stampObj.scale = Math.max(0.4, Math.min(2.8, stampObj.scale));
 
         const angleDiff = (curAngle - startAngle) * (180 / Math.PI);
         stampObj.rotation = (startRot + angleDiff) % 360;
@@ -538,18 +536,17 @@
         updateStampCSS(stampObj);
       }
 
-      function endRotateScale() {
-        window.removeEventListener('mousemove', onRotateScale);
-        window.removeEventListener('mouseup', endRotateScale);
-        window.removeEventListener('touchmove', onRotateScale);
-        window.removeEventListener('touchend', endRotateScale);
+      function onRotateUp(pEv) {
+        try { handleEl.releasePointerCapture(pEv.pointerId); } catch(err){}
+        handleEl.removeEventListener('pointermove', onRotateMove);
+        handleEl.removeEventListener('pointerup', onRotateUp);
+        handleEl.removeEventListener('pointercancel', onRotateUp);
       }
 
-      window.addEventListener('mousemove', onRotateScale);
-      window.addEventListener('mouseup', endRotateScale);
-      window.addEventListener('touchmove', onRotateScale, { passive: false });
-      window.addEventListener('touchend', endRotateScale);
-    }
+      handleEl.addEventListener('pointermove', onRotateMove);
+      handleEl.addEventListener('pointerup', onRotateUp);
+      handleEl.addEventListener('pointercancel', onRotateUp);
+    });
   }
 
   function selectStamp(stampObj) {
@@ -753,14 +750,16 @@
     state.stamps = [];
     if (data.st) {
       data.st.forEach(sData => {
-        const stickerData = STICKERS_LIST.find(s => s.id === sData.id) || STICKERS_LIST[0];
-        const stampEl = document.createElement('div');
-        stampEl.className = 'placed-stamp';
-        stampEl.innerHTML = `<img src="${stickerData.src}" alt="${stickerData.label}">`;
-        stampEl.style.left = `${sData.x}%`;
-        stampEl.style.top = `${sData.y}%`;
-        stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
-        stampsOverlay.appendChild(stampEl);
+        const svgContent = SVG_CACHE[sData.id];
+        if (svgContent) {
+          const stampEl = document.createElement('div');
+          stampEl.className = 'placed-stamp';
+          stampEl.innerHTML = svgContent;
+          stampEl.style.left = `${sData.x}%`;
+          stampEl.style.top = `${sData.y}%`;
+          stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
+          stampsOverlay.appendChild(stampEl);
+        }
       });
     }
 
@@ -948,10 +947,22 @@
       eCtx.stroke();
     });
 
-    // 4. Render Draggable Cute Stickers
+    // 4. Render Draggable Transparent Vector Stickers
     const stampPromises = state.stamps.map(stamp => {
       return new Promise((resolve) => {
-        const stickerData = STICKERS_LIST.find(s => s.id === stamp.id) || STICKERS_LIST[0];
+        const svgContent = SVG_CACHE[stamp.id];
+        if (!svgContent) return resolve();
+        
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgContent, 'image/svg+xml');
+        const svgEl = doc.querySelector('svg');
+        svgEl.setAttribute('width', '100');
+        svgEl.setAttribute('height', '100');
+        
+        const serialized = new XMLSerializer().serializeToString(svgEl);
+        const svgBlob = new Blob([serialized], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+        
         const img = new Image();
         img.onload = () => {
           eCtx.save();
@@ -963,10 +974,14 @@
           const drawSize = 140 * stamp.scale;
           eCtx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
           eCtx.restore();
+          URL.revokeObjectURL(url);
           resolve();
         };
-        img.onerror = resolve;
-        img.src = stickerData.src;
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        img.src = url;
       });
     });
 

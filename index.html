@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=130">
+  <link rel="stylesheet" href="styles.css?v=140">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -42,7 +42,7 @@
         <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
         <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dear friend...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
 
-        <!-- Absolute placed stamps overlay -->
+        <!-- Absolute placed stamps & stickers overlay -->
         <div class="stamps-overlay" id="stamps-overlay"></div>
       </div>
 
@@ -65,9 +65,9 @@
             <!-- JS Populated -->
           </div>
 
-          <!-- Cute Stickers for Card -->
+          <!-- Transparent Cute Stickers for Card -->
           <div class="stamps-picker" id="stamps-picker">
-            <!-- JS Populated with Cute Stickers -->
+            <!-- JS Populated with Transparent Stickers -->
           </div>
 
           <!-- Clear Doodles Trash Icon Button -->
@@ -217,6 +217,69 @@
   <!-- Toast Notification Overlay -->
   <div id="toast-notification" class="toast-container">Copied link! 📬</div>
 
-  <script src="app.js?v=130"></script>
+  <!-- SVG TRANSPARENT VECTOR STICKERS LIBRARY -->
+  <div style="display: none;">
+    
+    <!-- STICKER 1: Glossy Red Heart -->
+    <svg id="sticker-heart" viewBox="0 0 100 100" fill="none">
+      <path d="M 50 88 C 20 62 10 38 30 20 C 42 10 50 25 50 25 C 50 25 58 10 70 20 C 90 38 80 62 50 88 Z" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M 50 86 C 22 61 12 39 31 22 C 42 12 50 26 50 26 C 50 26 58 12 69 22 C 88 39 78 61 50 86 Z" fill="url(#grad-heart)"/>
+      <ellipse cx="36" cy="30" rx="8" ry="4" transform="rotate(-35 36 30)" fill="#ffffff" opacity="0.55"/>
+      <defs>
+        <linearGradient id="grad-heart" x1="20" y1="10" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#ff4d6d"/>
+          <stop offset="100%" stop-color="#c9184a"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- STICKER 2: Gold Sparkles -->
+    <svg id="sticker-sparkles" viewBox="0 0 100 100" fill="none">
+      <path d="M50 15 L56 38 L78 44 L56 50 L50 73 L44 50 L22 44 L44 38 Z" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
+      <circle cx="75" cy="22" r="8" fill="#ffffff"/>
+      <circle cx="25" cy="72" r="6" fill="#ffffff"/>
+      <path d="M50 16 L55 39 L77 44 L55 49 L50 72 L45 49 L23 44 L45 39 Z" fill="url(#grad-star)"/>
+      <path d="M75 16 L77 22 L83 24 L77 26 L75 32 L73 26 L67 24 L73 22 Z" fill="#ffb703"/>
+      <path d="M25 67 L26 72 L31 73 L26 74 L25 79 L24 74 L19 73 L24 72 Z" fill="#ffd166"/>
+      <defs>
+        <linearGradient id="grad-star" x1="20" y1="15" x2="80" y2="75" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#ffea00"/>
+          <stop offset="100%" stop-color="#ffb703"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- STICKER 3: Pink Flower Blossom -->
+    <svg id="sticker-flower" viewBox="0 0 100 100" fill="none">
+      <circle cx="50" cy="45" r="32" fill="#ffffff" stroke="#ffffff" stroke-width="8"/>
+      <path d="M50 70 Q45 85 40 92 Q55 88 50 70 Z" fill="#ffffff" stroke="#ffffff" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M50 65 Q46 80 42 90" stroke="#2a9d8f" stroke-width="5" stroke-linecap="round"/>
+      <path d="M47 75 Q32 70 36 62 Q45 68 47 75 Z" fill="#2a9d8f"/>
+      <ellipse cx="50" cy="22" rx="9" ry="16" fill="#ffb5a7"/>
+      <ellipse cx="50" cy="68" rx="9" ry="16" fill="#ffb5a7"/>
+      <ellipse cx="27" cy="45" rx="16" ry="9" fill="#ffb5a7"/>
+      <ellipse cx="73" cy="45" rx="16" ry="9" fill="#ffb5a7"/>
+      <ellipse cx="34" cy="29" rx="11" ry="14" transform="rotate(-45 34 29)" fill="#fcd5ce"/>
+      <ellipse cx="66" cy="61" rx="11" ry="14" transform="rotate(-45 66 61)" fill="#fcd5ce"/>
+      <ellipse cx="66" cy="29" rx="11" ry="14" transform="rotate(45 66 29)" fill="#fcd5ce"/>
+      <ellipse cx="34" cy="61" rx="11" ry="14" transform="rotate(45 34 61)" fill="#fcd5ce"/>
+      <circle cx="50" cy="45" r="12" fill="#ffe169" stroke="#f4a261" stroke-width="2"/>
+    </svg>
+
+    <!-- STICKER 4: Cute Coffee Mug -->
+    <svg id="sticker-coffee" viewBox="0 0 100 100" fill="none">
+      <rect x="20" y="28" width="52" height="52" rx="14" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M70 40 C85 40 85 60 70 60" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+      <rect x="22" y="30" width="48" height="48" rx="12" fill="#800f2f"/>
+      <path d="M70 42 C82 42 82 58 70 58" fill="none" stroke="#800f2f" stroke-width="5" stroke-linecap="round"/>
+      <path d="M34 20 Q38 14 34 8" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+      <path d="M46 22 Q50 16 46 10" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+      <path d="M58 20 Q62 14 58 8" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+      <path d="M46 58 C35 50 32 42 39 37 C 43 33 46 38 46 38 C 46 38 49 33 53 37 C 60 42 57 50 46 58 Z" fill="#ffb5a7"/>
+    </svg>
+
+  </div>
+
+  <script src="app.js?v=140"></script>
 </body>
 </html>

@@ -205,7 +205,7 @@ body {
   pointer-events: auto;
 }
 
-/* --- Placing & Dragging Cute Stickers on Card --- */
+/* --- Placing & Dragging Transparent Vector Stickers on Card --- */
 .stamps-overlay {
   position: absolute;
   top: 0;
@@ -227,42 +227,50 @@ body {
   touch-action: none;
 }
 
-.placed-stamp img {
+.placed-stamp svg {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.22));
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+  transition: transform 0.2s var(--bounce-easing);
 }
 
-.placed-stamp:hover {
-  outline: 2px dashed var(--color-rose);
-  outline-offset: 4px;
-  border-radius: 50%;
+.placed-stamp:hover svg {
+  transform: scale(1.08);
 }
 
 .placed-stamp.dragging {
   cursor: grabbing;
   opacity: 0.95;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.32));
+  z-index: 20;
+}
+.placed-stamp.dragging svg {
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35));
 }
 
-/* Controls for deletion and resize */
+/* Selection Ring */
 .placed-stamp.selected::before {
   content: '';
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
-  border: 2px solid var(--color-rose);
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 2px dashed var(--color-rose);
   border-radius: 50%;
   pointer-events: none;
+  animation: rotateBorder 12s linear infinite;
+}
+
+@keyframes rotateBorder {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .stamp-btn {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   border: 1.5px solid white;
   display: none;
@@ -397,19 +405,18 @@ body {
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s var(--bounce-easing);
   pointer-events: auto;
 }
 
-.stamp-thumb img {
+.stamp-thumb svg {
   width: 100%;
   height: 100%;
-  object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .stamp-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.22);
 }
 
 /* Sleek Icon Clear Button */

@@ -1,4 +1,4 @@
-// app.js - Streamlined & Unified Postcard Logic
+// app.js - Streamlined & Unified Postcard Logic with Real Vintage Stamps
 
 (function() {
   
@@ -17,13 +17,11 @@
     isOpening: false             // lock flag during open animation
   };
 
-  const STAMP_SVGS = {};         // SVG elements lookup table for canvas exports
-
-  // Core Stamps Tray configuration (Heart, Pigeon, Flower)
+  // Real Vintage Postage Stamps List
   const STAMPS_LIST = [
-    { id: 'stamp-heart', label: 'Heart' },
-    { id: 'stamp-pigeon', label: 'Pigeon' },
-    { id: 'stamp-flower', label: 'Flower' }
+    { id: 'stamp-heart', label: 'Victorian Heart Stamp', src: 'assets/stamps/stamp_heart.png' },
+    { id: 'stamp-bird', label: 'Air Mail Pigeon Stamp', src: 'assets/stamps/stamp_bird.png' },
+    { id: 'stamp-rose', label: 'Botanical Rose Stamp', src: 'assets/stamps/stamp_rose.png' }
   ];
 
   // Colors available for pen
@@ -184,7 +182,7 @@
     }
   }
 
-  // --- Populate Colors and Stamps UI ---
+  // --- Populate Colors and Real Stamps UI ---
   function populateToolbar() {
     // Colors
     const paletteContainer = document.getElementById('colors-palette');
@@ -197,8 +195,6 @@
       
       dot.addEventListener('click', (e) => {
         e.stopPropagation();
-        
-        // If clicking the ALREADY ACTIVE color dot -> UN-CLICK / DESELECT IT to return to Type Mode!
         if (state.activeMode === 'draw' && state.brushColor === color) {
           setMode('type');
         } else {
@@ -210,19 +206,14 @@
       paletteContainer.appendChild(dot);
     });
 
-    // Stamps for Doodle Card
+    // Real Stamps Tray
     stampsTray.innerHTML = '';
     STAMPS_LIST.forEach(stamp => {
       const stampThumb = document.createElement('div');
       stampThumb.className = 'stamp-thumb';
       stampThumb.dataset.id = stamp.id;
       stampThumb.title = stamp.label;
-      
-      const svgTemplate = document.getElementById(stamp.id);
-      if (svgTemplate) {
-        stampThumb.innerHTML = svgTemplate.outerHTML;
-        STAMP_SVGS[stamp.id] = svgTemplate.outerHTML;
-      }
+      stampThumb.innerHTML = `<img src="${stamp.src}" alt="${stamp.label}">`;
       
       stampThumb.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -244,11 +235,7 @@
       opt.className = 'env-stamp-opt' + (stamp.id === state.selectedEnvStamp ? ' active' : '');
       opt.dataset.id = stamp.id;
       opt.title = `Envelope Stamp: ${stamp.label}`;
-      
-      const svgTemplate = document.getElementById(stamp.id);
-      if (svgTemplate) {
-        opt.innerHTML = svgTemplate.outerHTML;
-      }
+      opt.innerHTML = `<img src="${stamp.src}" alt="${stamp.label}">`;
 
       opt.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -265,9 +252,9 @@
   }
 
   function updateEnvelopeStampDisplay(stampId) {
-    const template = document.getElementById(stampId);
-    if (template && envelopeStampSpot) {
-      envelopeStampSpot.innerHTML = template.outerHTML;
+    const stampData = STAMPS_LIST.find(s => s.id === stampId) || STAMPS_LIST[0];
+    if (envelopeStampSpot) {
+      envelopeStampSpot.innerHTML = `<img src="${stampData.src}" alt="${stampData.label}">`;
     }
   }
 
@@ -415,16 +402,15 @@
     }
   }
 
-  // --- SVG Stamp Manager (Draggable on Card) ---
+  // --- Real Vintage Stamp Manager (Draggable on Card) ---
   function placeStampOnCard(stampId) {
-    const template = document.getElementById(stampId);
-    if (!template) return;
+    const stampData = STAMPS_LIST.find(s => s.id === stampId) || STAMPS_LIST[0];
     
     const stampEl = document.createElement('div');
     stampEl.className = 'placed-stamp';
     stampEl.dataset.id = stampId;
     stampEl.innerHTML = `
-      ${template.outerHTML}
+      <img src="${stampData.src}" alt="${stampData.label}">
       <div class="stamp-btn stamp-del-btn"><i class="fas fa-times"></i></div>
       <div class="stamp-btn stamp-rot-btn"><i class="fas fa-sync-alt"></i></div>
     `;
@@ -760,16 +746,14 @@
     state.stamps = [];
     if (data.st) {
       data.st.forEach(sData => {
-        const template = document.getElementById(sData.id);
-        if (template) {
-          const stampEl = document.createElement('div');
-          stampEl.className = 'placed-stamp';
-          stampEl.innerHTML = template.outerHTML;
-          stampEl.style.left = `${sData.x}%`;
-          stampEl.style.top = `${sData.y}%`;
-          stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
-          stampsOverlay.appendChild(stampEl);
-        }
+        const stampData = STAMPS_LIST.find(s => s.id === sData.id) || STAMPS_LIST[0];
+        const stampEl = document.createElement('div');
+        stampEl.className = 'placed-stamp';
+        stampEl.innerHTML = `<img src="${stampData.src}" alt="${stampData.label}">`;
+        stampEl.style.left = `${sData.x}%`;
+        stampEl.style.top = `${sData.y}%`;
+        stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
+        stampsOverlay.appendChild(stampEl);
       });
     }
 
@@ -957,22 +941,10 @@
       eCtx.stroke();
     });
 
-    // 4. Render Draggable Stamps
+    // 4. Render Draggable Real Stamps
     const stampPromises = state.stamps.map(stamp => {
       return new Promise((resolve) => {
-        const svgContent = STAMP_SVGS[stamp.id];
-        if (!svgContent) return resolve();
-        
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(svgContent, 'image/svg+xml');
-        const svgEl = doc.querySelector('svg');
-        svgEl.setAttribute('width', '100');
-        svgEl.setAttribute('height', '100');
-        
-        const serialized = new XMLSerializer().serializeToString(svgEl);
-        const svgBlob = new Blob([serialized], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
-        
+        const stampData = STAMPS_LIST.find(s => s.id === stamp.id) || STAMPS_LIST[0];
         const img = new Image();
         img.onload = () => {
           eCtx.save();
@@ -981,17 +953,13 @@
           eCtx.translate(stampX, stampY);
           eCtx.rotate((stamp.rotation * Math.PI) / 180);
           
-          const drawSize = 140 * stamp.scale;
+          const drawSize = 150 * stamp.scale;
           eCtx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
           eCtx.restore();
-          URL.revokeObjectURL(url);
           resolve();
         };
-        img.onerror = () => {
-          URL.revokeObjectURL(url);
-          resolve();
-        };
-        img.src = url;
+        img.onerror = resolve;
+        img.src = stampData.src;
       });
     });
 

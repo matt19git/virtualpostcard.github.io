@@ -205,7 +205,7 @@ body {
   pointer-events: auto;
 }
 
-/* --- Placing & Dragging Stamps overlay --- */
+/* --- Placing & Dragging Real Postage Stamps --- */
 .stamps-overlay {
   position: absolute;
   top: 0;
@@ -218,8 +218,8 @@ body {
 
 .placed-stamp {
   position: absolute;
-  width: 85px;
-  height: 85px;
+  width: 90px;
+  height: 90px;
   pointer-events: auto;
   cursor: grab;
   transform-origin: center center;
@@ -227,21 +227,23 @@ body {
   touch-action: none;
 }
 
+.placed-stamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.3));
+}
+
 .placed-stamp:hover {
   outline: 2px dashed var(--color-rose);
   outline-offset: 4px;
+  border-radius: 4px;
 }
 
 .placed-stamp.dragging {
   cursor: grabbing;
   opacity: 0.95;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
-}
-
-.placed-stamp svg {
-  width: 100%;
-  height: 100%;
-  display: block;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.35));
 }
 
 /* Controls for deletion and resize */
@@ -389,25 +391,25 @@ body {
 }
 
 .stamp-thumb {
-  width: 32px;
-  height: 32px;
-  padding: 3px;
-  border-radius: var(--border-radius-sm);
-  background: white;
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  border-radius: 4px;
+  background: transparent;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease;
   pointer-events: auto;
 }
 
-.stamp-thumb:hover {
-  transform: scale(1.15);
-  background: var(--color-rose-light);
-}
-
-.stamp-thumb svg {
+.stamp-thumb img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.stamp-thumb:hover {
+  transform: scale(1.18);
 }
 
 /* Sleek Icon Clear Button */
@@ -633,29 +635,32 @@ body {
 }
 
 .env-stamp-opt {
-  width: 48px;
-  height: 48px;
-  padding: 4px;
-  border-radius: var(--border-radius-sm);
-  background: white;
-  border: 2px solid #e1d6c7;
+  width: 52px;
+  height: 52px;
+  padding: 3px;
+  border-radius: 4px;
+  background: transparent;
+  border: 2px solid transparent;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.env-stamp-opt img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
 .env-stamp-opt:hover {
-  transform: scale(1.1);
+  transform: scale(1.12);
 }
 
 .env-stamp-opt.active {
   border-color: var(--color-rose-dark);
   box-shadow: 0 0 0 3px var(--color-rose-light);
-  transform: scale(1.12);
-}
-
-.env-stamp-opt svg {
-  width: 100%;
-  height: 100%;
+  transform: scale(1.15);
+  background: rgba(255,255,255,0.4);
 }
 
 /* --- Fixed & Reliable 2D Envelope Layout --- */
@@ -767,26 +772,27 @@ body {
   pointer-events: none;
 }
 
-/* Postage Stamp in Top Right */
+/* Real Postage Stamp in Top Right of Envelope */
 .envelope-stamp-spot {
   position: absolute;
-  top: 18px;
-  right: 22px;
-  width: 65px;
-  height: 75px;
-  border: 2px dashed rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
+  top: 16px;
+  right: 20px;
+  width: 68px;
+  height: 78px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 5;
-  background: rgba(255, 255, 255, 0.15);
-  overflow: hidden;
+  background: transparent;
+  overflow: visible;
 }
 
-.envelope-stamp-spot svg {
+.envelope-stamp-spot img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  transform: rotate(3deg);
 }
 
 /* Wax Seal at the center top flap tip */

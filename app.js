@@ -21,10 +21,9 @@
 
   // Transparent Cute Vector Stickers for the Letter Card
   const STICKERS_LIST = [
-    { id: 'sticker-heart', label: 'Glossy Heart Sticker' },
+    { id: 'sticker-heart', label: 'Crimson Heart Sticker' },
     { id: 'sticker-sparkles', label: 'Gold Sparkles Sticker' },
-    { id: 'sticker-flower', label: 'Pink Blossom Sticker' },
-    { id: 'sticker-coffee', label: 'Cute Coffee Mug Sticker' }
+    { id: 'sticker-flower', label: 'Pink Blossom Sticker' }
   ];
 
   // Real Vintage Postage Stamps for Envelope
@@ -457,7 +456,7 @@
   function bindStampPointerHandlers(stampObj) {
     const el = stampObj.el;
     
-    // Smooth Pointer events dragging (Handles Mouse, Touch, Stylus seamlessly)
+    // Smooth Pointer events dragging
     el.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.stamp-btn')) return;
       e.stopPropagation();

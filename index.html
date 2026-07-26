@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=140">
+  <link rel="stylesheet" href="styles.css?v=150">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -70,7 +70,7 @@
             <!-- JS Populated with Transparent Stickers -->
           </div>
 
-          <!-- Clear Doodles Trash Icon Button -->
+          <!-- Clear Doodles Trash Icon Button Inside Border Box -->
           <button id="btn-clear-canvas" class="btn-clear-icon" title="Clear Doodles">
             <i class="fas fa-trash-alt"></i>
           </button>
@@ -220,15 +220,18 @@
   <!-- SVG TRANSPARENT VECTOR STICKERS LIBRARY -->
   <div style="display: none;">
     
-    <!-- STICKER 1: Glossy Red Heart -->
+    <!-- STICKER 1: Beautiful Red Heart -->
     <svg id="sticker-heart" viewBox="0 0 100 100" fill="none">
-      <path d="M 50 88 C 20 62 10 38 30 20 C 42 10 50 25 50 25 C 50 25 58 10 70 20 C 90 38 80 62 50 88 Z" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
-      <path d="M 50 86 C 22 61 12 39 31 22 C 42 12 50 26 50 26 C 50 26 58 12 69 22 C 88 39 78 61 50 86 Z" fill="url(#grad-heart)"/>
-      <ellipse cx="36" cy="30" rx="8" ry="4" transform="rotate(-35 36 30)" fill="#ffffff" opacity="0.55"/>
+      <!-- White Vinyl Die-Cut Outline -->
+      <path d="M 50 84 C 18 52 12 27 34 16 C 45 10 50 23 50 23 C 50 23 55 10 66 16 C 88 27 82 52 50 84 Z" fill="#ffffff" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
+      <!-- Vibrant Crimson Heart Body -->
+      <path d="M 50 82 C 19 50 14 26 35 16 C 45 11 50 23 50 23 C 50 23 55 11 65 16 C 86 26 81 50 50 82 Z" fill="url(#grad-heart-red)"/>
+      <!-- Subtle Glossy Soft Highlight -->
+      <path d="M 30 22 C 24 28 24 38 27 46 C 25 40 26 29 32 24 Z" fill="#ffffff" opacity="0.65"/>
       <defs>
-        <linearGradient id="grad-heart" x1="20" y1="10" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+        <linearGradient id="grad-heart-red" x1="20" y1="15" x2="80" y2="85" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stop-color="#ff4d6d"/>
-          <stop offset="100%" stop-color="#c9184a"/>
+          <stop offset="100%" stop-color="#b7094c"/>
         </linearGradient>
       </defs>
     </svg>
@@ -266,20 +269,8 @@
       <circle cx="50" cy="45" r="12" fill="#ffe169" stroke="#f4a261" stroke-width="2"/>
     </svg>
 
-    <!-- STICKER 4: Cute Coffee Mug -->
-    <svg id="sticker-coffee" viewBox="0 0 100 100" fill="none">
-      <rect x="20" y="28" width="52" height="52" rx="14" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
-      <path d="M70 40 C85 40 85 60 70 60" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
-      <rect x="22" y="30" width="48" height="48" rx="12" fill="#800f2f"/>
-      <path d="M70 42 C82 42 82 58 70 58" fill="none" stroke="#800f2f" stroke-width="5" stroke-linecap="round"/>
-      <path d="M34 20 Q38 14 34 8" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
-      <path d="M46 22 Q50 16 46 10" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
-      <path d="M58 20 Q62 14 58 8" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
-      <path d="M46 58 C35 50 32 42 39 37 C 43 33 46 38 46 38 C 46 38 49 33 53 37 C 60 42 57 50 46 58 Z" fill="#ffb5a7"/>
-    </svg>
-
   </div>
 
-  <script src="app.js?v=140"></script>
+  <script src="app.js?v=150"></script>
 </body>
 </html>

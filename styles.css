@@ -156,6 +156,12 @@ body {
   margin: 0 auto;
 }
 
+/* Smooth Scrolling Wrapper for Received Letter Reading */
+.postcard-card.scrollable-card {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Paper grain weathering overlay */
 .postcard-texture {
   position: absolute;
@@ -489,7 +495,7 @@ body {
   border-color: white;
 }
 
-/* --- Review Desk Previews Layout (Proportional & Centered) --- */
+/* --- Review Desk Previews Layout --- */
 .review-desk-panel {
   display: none;
   width: 100%;
@@ -670,7 +676,7 @@ body {
   background: rgba(255,255,255,0.4);
 }
 
-/* --- REALISTIC 3D ENVELOPE FLIP: FRONT & BACK SIDES --- */
+/* --- VECTOR SVG ENVELOPE: 100% CRISP ON IPHONE & MOBILE --- */
 .envelope-container {
   position: relative;
   width: min(600px, 94vw);
@@ -709,6 +715,7 @@ body {
   border-radius: 12px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
 }
 
 /* Front Side: Clean Envelope Face with Address & Top-Right Stamp */
@@ -717,74 +724,29 @@ body {
   transform: rotateY(0deg);
 }
 
-/* Back Side: Envelope Flaps & Center Wax Seal */
+/* Back Side: Envelope Vector SVG Flaps & Center Wax Seal */
 .envelope-back-side {
   z-index: 1;
   transform: rotateY(180deg);
 }
 
-.envelope-flaps {
+.envelope-flaps-svg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  overflow: visible;
 }
 
-.flap {
-  position: absolute;
-}
-
-.flap.left {
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 210px solid transparent;
-  border-bottom: 210px solid transparent;
-  border-left: 300px solid rgba(255, 255, 255, 0.1);
-  z-index: 1;
-}
-
-.flap.right {
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-top: 210px solid transparent;
-  border-bottom: 210px solid transparent;
-  border-right: 300px solid rgba(255, 255, 255, 0.1);
-  z-index: 1;
-}
-
-.flap.bottom {
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 300px solid transparent;
-  border-right: 300px solid transparent;
-  border-bottom: 220px solid rgba(0, 0, 0, 0.08);
-  z-index: 1;
-}
-
-.flap.top {
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-left: 300px solid transparent;
-  border-right: 300px solid transparent;
-  border-top: 220px solid var(--env-bg-dark);
-  transform-origin: top center;
+.top-flap-poly {
+  transform-origin: 250px 0px;
   transition: transform 0.6s ease;
-  z-index: 3;
 }
 
-.envelope.open .flap.top {
-  transform: rotateX(180deg);
-  z-index: 0;
+.envelope.open .top-flap-poly {
+  transform: scaleY(-1);
 }
 
 /* Front Side: Recipient / Sender Address Lines */
@@ -834,11 +796,11 @@ body {
 /* Back Side: Wax Seal at the center top flap tip */
 .wax-seal {
   position: absolute;
-  top: 190px;
+  top: 48%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 78px;
-  height: 78px;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 6;
@@ -855,7 +817,7 @@ body {
 }
 
 .wax-seal:hover {
-  transform: scale(1.08);
+  transform: translate(-50%, -50%) scale(1.08);
 }
 
 .wax-seal svg {
@@ -981,9 +943,9 @@ dialog::backdrop {
 
 /* --- Keyframe Animations --- */
 @keyframes sealBreak {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15) rotate(5deg); opacity: 0.9; }
-  100% { transform: scale(0.9) rotate(-10deg) translateY(30px); opacity: 0; }
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.15) rotate(5deg); opacity: 0.9; }
+  100% { transform: translate(-50%, calc(-50% + 30px)) scale(0.9) rotate(-10deg); opacity: 0; }
 }
 
 @keyframes fadeIn {
@@ -1021,6 +983,25 @@ dialog::backdrop {
     justify-content: center;
     gap: 8px;
     padding: 8px;
+  }
+
+  .address-lines {
+    left: 20px;
+    font-size: 1.4rem;
+    gap: 4px;
+    padding-left: 12px;
+  }
+
+  .envelope-stamp-spot {
+    top: 14px;
+    right: 14px;
+    width: 58px;
+    height: 68px;
+  }
+
+  .wax-seal {
+    width: 62px;
+    height: 62px;
   }
 }
 

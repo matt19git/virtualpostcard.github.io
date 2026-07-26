@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=180">
+  <link rel="stylesheet" href="styles.css?v=190">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -145,7 +145,7 @@
     <div id="view-recipient" class="view-panel">
       <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 📬</div>
       
-      <!-- Envelope Container (Clean 2D Vector Envelope with Front & Back Sides) -->
+      <!-- Envelope Container (Vector SVG Envelope with Front & Back Sides) -->
       <div class="envelope-container" id="envelope-container">
         <div class="envelope env-pink" id="envelope">
           
@@ -158,14 +158,15 @@
             </div>
           </div>
 
-          <!-- BACK SIDE OF ENVELOPE: Flaps & Wax Seal (Used during sealing & opening) -->
+          <!-- BACK SIDE OF ENVELOPE: Vector SVG Flaps & Wax Seal -->
           <div class="envelope-side envelope-back-side">
-            <div class="envelope-flaps">
-              <div class="flap left"></div>
-              <div class="flap right"></div>
-              <div class="flap bottom"></div>
-              <div class="flap top"></div>
-            </div>
+            <svg class="envelope-flaps-svg" viewBox="0 0 500 350" preserveAspectRatio="none">
+              <polygon points="0,0 250,175 0,350" fill="rgba(255, 255, 255, 0.14)"/>
+              <polygon points="500,0 250,175 500,350" fill="rgba(255, 255, 255, 0.14)"/>
+              <polygon points="0,350 250,165 500,350" fill="rgba(0, 0, 0, 0.09)"/>
+              <polygon class="top-flap-poly" points="0,0 250,185 500,0" fill="var(--env-bg-dark)"/>
+            </svg>
+
             <!-- Clickable Wax Seal on Back Flap -->
             <div class="wax-seal" id="wax-seal-element">
               <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(0,0,0,0.35)"/></svg>
@@ -277,6 +278,6 @@
 
   </div>
 
-  <script src="app.js?v=180"></script>
+  <script src="app.js?v=190"></script>
 </body>
 </html>

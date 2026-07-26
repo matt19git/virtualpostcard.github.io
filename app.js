@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Mobile Viewport Centering for Both Mailing & Recipient Opening
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Vector SVG Envelope Flaps & Unified Mobile Scrolling
 
 (function() {
   
@@ -668,20 +668,18 @@
         envelopeEl.classList.add('show-back');
 
         // 3. Top flap folds down
-        const topFlap = envelopeEl.querySelector('.flap.top');
-        topFlap.style.transform = 'rotateX(0deg)';
-        topFlap.style.zIndex = '3';
+        envelopeEl.classList.remove('open');
 
         setTimeout(() => {
           // 4. Wax seal stamps down in center
           waxSealEl.style.opacity = '0';
-          waxSealEl.style.transform = 'scale(2.2) translate(-50%, -50%)';
+          waxSealEl.style.transform = 'translate(-50%, -50%) scale(2.2)';
           waxSealEl.style.display = 'flex';
           
           setTimeout(() => {
             waxSealEl.style.transition = 'all 0.3s var(--bounce-easing)';
             waxSealEl.style.opacity = '1';
-            waxSealEl.style.transform = 'scale(1) translateX(-50%)';
+            waxSealEl.style.transform = 'translate(-50%, -50%) scale(1)';
 
             // 5. Envelope flies off screen
             setTimeout(() => {
@@ -832,9 +830,6 @@
     waxSealEl.classList.remove('broken');
     waxSealEl.removeAttribute('style');
     waxSealEl.style.display = 'flex';
-    
-    const topFlap = envelopeEl.querySelector('.flap.top');
-    topFlap.removeAttribute('style');
 
     const screenWidth = window.innerWidth;
     const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;
@@ -877,11 +872,8 @@
       setTimeout(() => {
         waxSealEl.style.display = 'none';
         
-        // 3. Open top flap
+        // 3. Open top flap SVG
         envelopeEl.classList.add('open');
-        const topFlap = envelopeEl.querySelector('.flap.top');
-        topFlap.style.transform = 'rotateX(180deg)';
-        topFlap.style.zIndex = '0';
 
         setTimeout(() => {
           // 4. Letter card slides out smoothly
@@ -908,7 +900,8 @@
             setTimeout(() => {
               envelopeContainer.style.display = 'none';
               
-              // Enable scrolling for letter reading if text is long
+              // Lock all child elements (canvas, textarea, stickers) into unified smooth scrolling paper sheet
+              postcardCard.className = 'postcard-card scrollable-card';
               postcardCard.style.position = 'relative';
               postcardCard.style.top = 'auto';
               postcardCard.style.left = 'auto';

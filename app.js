@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Synchronized Text & Sticker Mobile Scrolling & Zero iOS Safari Clip-Through
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Recipient Banner Floating ABOVE Envelope
 
 (function() {
   
@@ -842,12 +842,13 @@
     // Viewport Centering for Mobile Recipient View
     envelopeContainer.removeAttribute('style');
     envelopeContainer.style.position = 'fixed';
-    envelopeContainer.style.top = '45%';
+    envelopeContainer.style.top = '48%';
     envelopeContainer.style.left = '50%';
     envelopeContainer.style.margin = '0';
     envelopeContainer.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
     envelopeContainer.style.display = 'block';
 
+    recipientHelpText.style.display = 'block';
     recipientHelpText.textContent = "You received a letter! Click the envelope to open. 📬";
 
     document.getElementById('view-home').classList.remove('active');

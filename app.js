@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Undo / Redo Doodle Controls
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Recipient Help Banner Shown ONLY for Recipients
 
 (function() {
   
@@ -620,6 +620,10 @@
   function transitionToReview() {
     deselectAllStamps();
 
+    if (recipientHelpText) {
+      recipientHelpText.style.display = 'none';
+    }
+
     document.querySelector('.previews-container').style.display = 'flex';
     document.querySelector('.review-form').style.display = 'flex';
 
@@ -650,6 +654,10 @@
   }
 
   function backToEditor() {
+    if (recipientHelpText) {
+      recipientHelpText.style.display = 'none';
+    }
+
     postcardCard.removeAttribute('style');
     postcardCard.classList.remove('recipient-mode');
     envelopeContainer.removeAttribute('style');
@@ -669,6 +677,10 @@
 
   // --- MOBILE SAFARI PERFECTLY CENTERED MAILING ANIMATION FLOW ---
   function triggerMailingAnimation() {
+    if (recipientHelpText) {
+      recipientHelpText.style.display = 'none';
+    }
+
     document.querySelector('.review-form').style.display = 'none';
     document.querySelector('.previews-container').style.display = 'none';
     
@@ -891,8 +903,11 @@
     envelopeContainer.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
     envelopeContainer.style.display = 'block';
 
-    recipientHelpText.style.display = 'block';
-    recipientHelpText.textContent = "You received a letter! Click the envelope to open. 📬";
+    // SHOW RECIPIENT HELP TEXT ONLY WHEN A RECIPIENT VIEWS A RECEIVED LETTER
+    if (recipientHelpText) {
+      recipientHelpText.style.display = 'block';
+      recipientHelpText.textContent = "You received a letter! Click the envelope to open. 📬";
+    }
 
     document.getElementById('view-home').classList.remove('active');
     document.getElementById('view-editor').classList.remove('active');
@@ -906,7 +921,9 @@
     if (!state.isRecipientView || state.isOpening) return;
     state.isOpening = true;
     
-    recipientHelpText.style.display = 'none';
+    if (recipientHelpText) {
+      recipientHelpText.style.display = 'none';
+    }
 
     const screenWidth = window.innerWidth;
     const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;

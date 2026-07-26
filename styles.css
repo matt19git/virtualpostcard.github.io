@@ -915,8 +915,9 @@ body {
   pointer-events: none;
 }
 
-/* Help text for recipient floating neatly ABOVE the envelope top edge */
+/* Help text for recipient floating neatly ABOVE the envelope top edge (Hidden by default) */
 .recipient-help-text {
+  display: none;
   position: absolute;
   top: -62px;
   left: 50%;

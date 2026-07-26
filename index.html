@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=240">
+  <link rel="stylesheet" href="styles.css?v=250">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -157,8 +157,8 @@
       <!-- Envelope Container (Vector SVG Envelope with Front & Back Sides) -->
       <div class="envelope-container" id="envelope-container">
         
-        <!-- Recipient Help Banner Floating Neatly Above Top Edge of Envelope -->
-        <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 📬</div>
+        <!-- Recipient Help Banner Floating Neatly Above Top Edge of Envelope (Hidden by default, shown ONLY for Recipient) -->
+        <div class="recipient-help-text" id="recipient-help-text" style="display:none;">You received a letter! Click the envelope to open. 📬</div>
 
         <div class="envelope env-pink" id="envelope">
           
@@ -291,6 +291,6 @@
 
   </div>
 
-  <script src="app.js?v=240"></script>
+  <script src="app.js?v=250"></script>
 </body>
 </html>

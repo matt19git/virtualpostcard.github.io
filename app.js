@@ -6,6 +6,7 @@
   const state = {
     brushColor: '#800f2f',       // default Crimson
     isDrawing: false,
+    isClickCandidate: false,
     strokes: [],                 // [{ color, points: [[x, y], ...] }] (relative 0-1000 coordinates)
     
     stamps: [],                  // [{ id, x, y, scale, rotation, el }] (relative 0-100% of card)
@@ -232,7 +233,7 @@
     }
   }
 
-  // --- Drawing Canvas Handler ---
+  // --- Full Sheet Drawing & Typing Handler ---
   function setupCanvas() {
     canvas.addEventListener('mousedown', startPaint);
     canvas.addEventListener('mousemove', paint);
@@ -269,6 +270,7 @@
   function startPaint(e) {
     if (state.isRecipientView) return;
     state.isDrawing = true;
+    state.isClickCandidate = true;
     
     const rect = canvas.getBoundingClientRect();
     const x = Math.round((e.clientX - rect.left) / rect.width * 1000);
@@ -302,6 +304,10 @@
     const current = state.strokes[state.strokes.length - 1];
     const last = current.points[current.points.length - 1];
     
+    if (Math.hypot(x - last[0], y - last[1]) > 4) {
+      state.isClickCandidate = false;
+    }
+    
     if (Math.hypot(x - last[0], y - last[1]) < 3) return;
     
     current.points.push([x, y]);
@@ -313,6 +319,14 @@
       state.isDrawing = false;
       simplifyLastStroke();
       redrawStrokes();
+      
+      // If user tapped without dragging, focus the textarea to type!
+      if (state.isClickCandidate && !state.isRecipientView) {
+        // remove single point stroke
+        state.strokes.pop();
+        redrawStrokes();
+        letterTextarea.focus();
+      }
     }
   }
 
@@ -457,7 +471,7 @@
       function endDrag() {
         el.classList.remove('dragging');
         window.removeEventListener('mousemove', onDrag);
-        window.removeEventListener('mouseup', onDrag);
+        window.removeEventListener('mouseup', endDrag);
         window.removeEventListener('touchmove', onDrag);
         window.removeEventListener('touchend', endDrag);
       }
@@ -540,7 +554,7 @@
     deselectAllStamps();
 
     cardReviewSpot.appendChild(postcardCard);
-    postcardCard.classList.add('in-review');
+    postcardCard.className = 'postcard-card in-review';
 
     envelopeReviewSpot.appendChild(envelopeContainer);
     envelopeContainer.className = 'envelope-container in-review';
@@ -563,7 +577,7 @@
 
   function backToEditor() {
     document.getElementById('view-editor').insertBefore(postcardCard, document.querySelector('.postcard-toolbar'));
-    postcardCard.classList.remove('in-review');
+    postcardCard.className = 'postcard-card';
     
     envelopeContainer.className = 'envelope-container';
     envelopeContainer.style.display = 'none';
@@ -575,15 +589,15 @@
     resizeCanvas();
   }
 
-  // --- MAILING ANIMATION FLOW (NO FLIPPING) ---
+  // --- MAILING ANIMATION FLOW ---
   function triggerMailingAnimation() {
     document.querySelector('.review-form').style.display = 'none';
     
     document.getElementById('view-review-desk').appendChild(postcardCard);
     document.getElementById('view-review-desk').appendChild(envelopeContainer);
     
-    postcardCard.classList.remove('in-review');
-    envelopeContainer.classList.remove('in-review');
+    postcardCard.className = 'postcard-card';
+    envelopeContainer.className = 'envelope-container';
     
     postcardCard.style.position = 'absolute';
     postcardCard.style.transform = 'scale(1) translateY(0)';
@@ -614,7 +628,7 @@
           setTimeout(() => {
             waxSealEl.style.transition = 'all 0.3s var(--bounce-easing)';
             waxSealEl.style.opacity = '1';
-            waxSealEl.style.transform = 'scale(1)';
+            waxSealEl.style.transform = 'scale(1) translateX(-50%)';
 
             // 4. Envelope flies off screen
             setTimeout(() => {
@@ -778,7 +792,7 @@
     resizeCanvas();
   }
 
-  // --- Crack Seal and slide out letter (NO FLIP) ---
+  // --- Crack Seal and slide out letter ---
   function crackSealAndReveal() {
     if (!state.isRecipientView || state.isOpening) return;
     state.isOpening = true;
@@ -844,7 +858,7 @@
   function downloadPostcardImage() {
     const exportCanvas = document.createElement('canvas');
     const width = 1200;
-    const height = 1500;
+    const height = 1400;
     exportCanvas.width = width;
     exportCanvas.height = height;
     const eCtx = exportCanvas.getContext('2d');
@@ -858,29 +872,14 @@
     eCtx.lineWidth = 4;
     eCtx.strokeRect(0, 0, width, height);
 
-    // Dotted card line separator (split top/bottom)
-    eCtx.strokeStyle = 'rgba(226, 149, 120, 0.4)';
-    eCtx.lineWidth = 4;
-    eCtx.setLineDash([12, 12]);
-    eCtx.beginPath();
-    eCtx.moveTo(0, height * 0.42);
-    eCtx.lineTo(width, height * 0.42);
-    eCtx.stroke();
-    eCtx.setLineDash([]);
-
-    // Faint canvas hint on top
-    eCtx.fillStyle = '#a09080';
-    eCtx.font = "bold 22px 'Outfit', sans-serif";
-    eCtx.fillText("DOODLE BOARD", 40, 50);
-
-    // 2. Draw Text message in bottom half
+    // 2. Draw Text message across paper
     const text = letterTextarea.value;
     eCtx.fillStyle = '#2b2d42';
     eCtx.font = "italic 44px 'Caveat', cursive";
     
     const lines = text.split('\n');
-    let yPos = (height * 0.42) + 70;
-    const lineHeight = 65;
+    let yPos = 80;
+    const lineHeight = 60;
     const maxWidth = width - 120;
 
     lines.forEach(line => {
@@ -900,7 +899,7 @@
       yPos += lineHeight;
     });
 
-    // 3. Draw Canvas Doodles
+    // 3. Draw Canvas Doodles across full sheet
     state.strokes.forEach(stroke => {
       if (stroke.points.length === 0) return;
       eCtx.beginPath();
@@ -911,7 +910,7 @@
 
       const p0 = stroke.points[0];
       const getX = (px) => (px / 1000) * width;
-      const getY = (py) => (py / 1000) * (height * 0.42);
+      const getY = (py) => (py / 1000) * height;
 
       eCtx.moveTo(getX(p0[0]), getY(p0[1]));
       

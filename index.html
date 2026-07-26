@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Love Mail - Write a letter to your love</title>
   <meta name="description" content="Write a letter to your love. Beautiful, private, and serverless.">
-  <link rel="stylesheet" href="styles.css?v=40">
+  <link rel="stylesheet" href="styles.css?v=50">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -31,23 +31,16 @@
       </div>
     </div>
 
-    <!-- VIEW 2: CARD EDITOR -->
+    <!-- VIEW 2: CARD EDITOR (FULL SHEET DRAW & TYPE ANYWHERE) -->
     <div id="view-editor" class="view-panel">
       
       <!-- The Physical Letter Card -->
       <div class="postcard-card" id="postcard-card">
         <div class="postcard-texture"></div>
         
-        <!-- Top Half: Drawing Pane -->
-        <div class="postcard-split-top">
-          <span class="canvas-hint">Doodle Board</span>
-          <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
-        </div>
-
-        <!-- Bottom Half: Writing Pane -->
-        <div class="postcard-split-bottom">
-          <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dearest Ashlyn...&#10;&#10;Write your message here. Draw a cute doodle on the board above, or place stamps!"></textarea>
-        </div>
+        <!-- Full-sheet Drawing Canvas over Textarea -->
+        <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
+        <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dearest Ashlyn...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
 
         <!-- Absolute placed stamps overlay -->
         <div class="stamps-overlay" id="stamps-overlay"></div>
@@ -221,7 +214,7 @@
 
     <!-- STAMP 2: Pigeon -->
     <svg id="stamp-pigeon" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#eff7f6" stroke="#a8dadc" stroke-width="2"/>
       <path d="M 28,45 Q 45,30 58,40 Q 68,35 72,42 Q 62,55 52,50 Q 42,65 34,58 L 28,45 Z" fill="#fff" stroke="#1d3557" stroke-width="1.5"/>
       <path d="M 58,40 Q 52,20 48,32" stroke="#1d3557" stroke-width="1.5"/>
@@ -231,7 +224,7 @@
 
     <!-- STAMP 3: Flower -->
     <svg id="stamp-flower" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#f7f5fb" stroke="#e27396" stroke-width="2"/>
       <circle cx="50" cy="46" r="6" fill="#ffe169" stroke="#e29578" stroke-width="1.5"/>
       <ellipse cx="50" cy="32" rx="4" ry="8" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
@@ -254,6 +247,6 @@
 
   </div>
 
-  <script src="app.js?v=40"></script>
+  <script src="app.js?v=50"></script>
 </body>
 </html>

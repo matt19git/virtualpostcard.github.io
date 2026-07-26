@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Recipient Banner Floating ABOVE Envelope
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Undo / Redo Doodle Controls
 
 (function() {
   
@@ -8,6 +8,7 @@
     brushColor: '#800f2f',       // default Crimson
     isDrawing: false,
     strokes: [],                 // [{ color, points: [[x, y], ...] }] (relative 0-1000 coordinates)
+    redoStack: [],               // Undone strokes stack for Redo
     
     stamps: [],                  // [{ id, x, y, scale, rotation, el }] (relative 0-100% of card)
     selectedStamp: null,
@@ -45,6 +46,7 @@
   let postcardCard, letterTextarea, letterTextDisplay;
   let stampsOverlay, stampsTray, envStampPicker;
   let btnModeType, btnModeDraw;
+  let btnUndo, btnRedo, btnClear;
   let envelopeContainer, envelopeEl, waxSealEl, envelopeStampSpot;
   let viewEditor, viewReviewDesk, viewRecipient, recipientHelpText;
   let shareModal, toastNotification;
@@ -75,6 +77,10 @@
 
     btnModeType = document.getElementById('btn-mode-text');
     btnModeDraw = document.getElementById('btn-mode-draw');
+
+    btnUndo = document.getElementById('btn-undo-canvas');
+    btnRedo = document.getElementById('btn-redo-canvas');
+    btnClear = document.getElementById('btn-clear-canvas');
     
     envelopeContainer = document.getElementById('envelope-container');
     envelopeEl = document.getElementById('envelope');
@@ -127,8 +133,10 @@
       });
     }
 
-    // Toolbar Buttons
-    document.getElementById('btn-clear-canvas').addEventListener('click', clearCanvas);
+    // Toolbar Action Buttons (Undo, Redo, Clear)
+    btnUndo.addEventListener('click', undoStroke);
+    btnRedo.addEventListener('click', redoStroke);
+    btnClear.addEventListener('click', clearCanvas);
     
     // Transition to Review Desk
     document.getElementById('btn-seal-send').addEventListener('click', transitionToReview);
@@ -245,6 +253,8 @@
       });
       stampsTray.appendChild(stampThumb);
     });
+
+    updateUndoRedoButtons();
   }
 
   // Populate Envelope Postage Stamp Selector on Address Desk
@@ -321,6 +331,9 @@
     if (state.isRecipientView || state.activeMode !== 'draw') return;
     state.isDrawing = true;
     
+    // Clear redo history when starting a new stroke
+    state.redoStack = [];
+    
     const rect = canvas.getBoundingClientRect();
     const x = Math.round((e.clientX - rect.left) / rect.width * 1000);
     const y = Math.round((e.clientY - rect.top) / rect.height * 1000);
@@ -341,6 +354,8 @@
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx, cy);
     ctx.stroke();
+
+    updateUndoRedoButtons();
   }
 
   function paint(e) {
@@ -364,6 +379,7 @@
       state.isDrawing = false;
       simplifyLastStroke();
       redrawStrokes();
+      updateUndoRedoButtons();
     }
   }
 
@@ -417,10 +433,37 @@
     });
   }
 
+  // --- UNDO / REDO / CLEAR CONTROLS ---
+  function undoStroke() {
+    if (state.strokes.length > 0) {
+      const undone = state.strokes.pop();
+      state.redoStack.push(undone);
+      redrawStrokes();
+      updateUndoRedoButtons();
+    }
+  }
+
+  function redoStroke() {
+    if (state.redoStack.length > 0) {
+      const redone = state.redoStack.pop();
+      state.strokes.push(redone);
+      redrawStrokes();
+      updateUndoRedoButtons();
+    }
+  }
+
+  function updateUndoRedoButtons() {
+    if (btnUndo) btnUndo.disabled = state.strokes.length === 0;
+    if (btnRedo) btnRedo.disabled = state.redoStack.length === 0;
+  }
+
   function clearCanvas() {
+    if (state.strokes.length === 0) return;
     if (confirm("Clear your doodle?")) {
+      state.redoStack = [...state.strokes];
       state.strokes = [];
       redrawStrokes();
+      updateUndoRedoButtons();
     }
   }
 

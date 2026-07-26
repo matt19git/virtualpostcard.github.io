@@ -311,11 +311,11 @@ body {
   justify-content: space-between;
   align-items: center;
   background: rgba(255, 255, 255, 0.15);
-  padding: 10px 14px;
+  padding: 8px 14px;
   border-radius: var(--border-radius-md);
   border: 1px solid rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(8px);
-  gap: 6px;
+  gap: 8px;
   width: 100%;
   pointer-events: auto;
 }
@@ -333,7 +333,7 @@ body {
 .mode-btn {
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   padding: 5px 10px;
   border-radius: 16px;
   border: none;
@@ -361,8 +361,8 @@ body {
 }
 
 .color-dot {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid white;
   cursor: pointer;
@@ -389,8 +389,8 @@ body {
 }
 
 .stamp-thumb {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 3px;
   border-radius: var(--border-radius-sm);
   background: white;
@@ -408,6 +408,30 @@ body {
 .stamp-thumb svg {
   width: 100%;
   height: 100%;
+}
+
+/* Sleek Icon Clear Button */
+.btn-clear-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.btn-clear-icon:hover {
+  background: rgba(255, 77, 79, 0.35);
+  border-color: #ff4d4f;
+  color: white;
+  transform: scale(1.12);
 }
 
 /* Buttons */

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Love Mail - Exchanged Virtual Postcards</title>
+  <title>Love Mail - Virtual Letters for Ashlyn & Matt</title>
   <meta name="description" content="Write, draw, stamp, and seal gorgeous virtual letters to send directly to your partner. Completely serverless and private.">
-  <link rel="stylesheet" href="styles.css?v=20">
+  <link rel="stylesheet" href="styles.css?v=30">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,7 +26,7 @@
         <h1 class="home-title">Love Mail <span>letters & doodles</span></h1>
         <p class="home-desc">
           Write a sweet letter, draw a custom doodle, and stick cute stamps on personalized paper stationery. 
-          Seal it with a crimson wax heart and send it directly via email or text!
+          Seal it with a crimson wax heart and send it directly to your partner!
         </p>
         <button id="btn-write-letter" class="btn btn-primary">
           <i class="fas fa-feather-alt"></i> Create a Postcard
@@ -49,7 +49,7 @@
 
         <!-- Bottom Half: Writing Pane -->
         <div class="postcard-split-bottom">
-          <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dearest...&#10;&#10;Write your message here. Draw a cute doodle on the board above, or place stamps below!"></textarea>
+          <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dearest Ashlyn...&#10;&#10;Write your message here. Draw a cute doodle on the board above, or place stamps!"></textarea>
         </div>
 
         <!-- Absolute placed stamps overlay -->
@@ -63,7 +63,7 @@
           <div class="colors-palette" id="colors-palette">
             <!-- JS Populated -->
           </div>
-          <!-- Stamp Stickers -->
+          <!-- Stamp Stickers for Card -->
           <div class="stamps-picker" id="stamps-picker">
             <!-- JS Populated -->
           </div>
@@ -72,7 +72,7 @@
           </button>
         </div>
         <button id="btn-seal-send" class="btn btn-primary" style="width: 100%; padding: 14px;">
-          <i class="fas fa-envelope"></i> Review & Address Letter
+          <i class="fas fa-envelope"></i> Address & Seal Envelope
         </button>
       </div>
 
@@ -93,7 +93,7 @@
           
           <!-- Right Spot: Envelope Preview -->
           <div class="preview-box">
-            <span class="preview-label">Envelope (Click to Flip)</span>
+            <span class="preview-label">Envelope Preview</span>
             <div class="envelope-review-spot" id="envelope-review-spot">
               <!-- Envelope container is appended here dynamically in review mode -->
             </div>
@@ -103,14 +103,22 @@
         <!-- Inputs and Confirm Panel -->
         <div class="review-form">
           <h3>Address Your Envelope</h3>
+          
           <div class="form-row">
             <div class="form-group">
               <label for="input-to">To Name</label>
-              <input type="text" id="input-to" class="form-input" placeholder="Sarah" value="">
+              <input type="text" id="input-to" class="form-input" placeholder="Ashlyn" value="Ashlyn">
             </div>
             <div class="form-group">
               <label for="input-from">From Name</label>
-              <input type="text" id="input-from" class="form-input" placeholder="Matt" value="">
+              <input type="text" id="input-from" class="form-input" placeholder="Matt" value="Matt">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Select Postage Stamp for Envelope</label>
+            <div class="env-stamp-picker" id="env-stamp-picker">
+              <!-- JS Populated -->
             </div>
           </div>
           
@@ -129,34 +137,31 @@
 
     <!-- VIEW 4: RECIPIENT ENVELOPE SCENE -->
     <div id="view-recipient" class="view-panel">
-      <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click anywhere on the envelope to open. 💌</div>
+      <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 💌</div>
       
-      <!-- Envelope Container (used for animation and viewer) -->
+      <!-- Envelope Container (Flat 2D Clean Design, No Flipping) -->
       <div class="envelope-container" id="envelope-container">
         <div class="envelope env-pink" id="envelope">
           
-          <!-- Front Face: Addresses -->
-          <div class="envelope-face envelope-front" id="env-front-face">
-            <div class="envelope-stamp-spot" id="envelope-stamp-spot"></div>
-            <div class="address-lines">
-              <div id="display-to">To: Sarah</div>
-              <div id="display-from">From: Matt</div>
-            </div>
+          <div class="envelope-flaps">
+            <div class="flap left"></div>
+            <div class="flap right"></div>
+            <div class="flap bottom"></div>
+            <div class="flap top"></div>
           </div>
-          
-          <!-- Back Face: Flaps & Seal -->
-          <div class="envelope-face envelope-back" id="env-back-face">
-            <div class="envelope-flaps">
-              <div class="flap left"></div>
-              <div class="flap right"></div>
-              <div class="flap bottom"></div>
-              <div class="flap top"></div>
-            </div>
-            
-            <!-- Dynamic Clickable Wax Seal -->
-            <div class="wax-seal" id="wax-seal-element">
-              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(0,0,0,0.35)"/></svg>
-            </div>
+
+          <!-- Top Right Postage Stamp -->
+          <div class="envelope-stamp-spot" id="envelope-stamp-spot"></div>
+
+          <!-- Center Address -->
+          <div class="address-lines">
+            <div id="display-to">To: Ashlyn</div>
+            <div id="display-from">From: Matt</div>
+          </div>
+
+          <!-- Dynamic Clickable Wax Seal -->
+          <div class="wax-seal" id="wax-seal-element">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(0,0,0,0.35)"/></svg>
           </div>
           
         </div>
@@ -178,7 +183,7 @@
       <div style="font-size: 3.5rem; color: var(--color-rose);">📬</div>
       <h4>Your letter is sealed!</h4>
       <p style="color: #666; font-size: 0.9rem; line-height: 1.5; margin-top: -10px;">
-        Exchanging is database-free. Copy the Magic Link or compose a pre-filled email to deliver your letter!
+        Copy your private Magic Link or send a pre-filled email to deliver your letter to Ashlyn!
       </p>
       
       <div class="share-link-box">
@@ -219,7 +224,7 @@
 
     <!-- STAMP 2: Pigeon -->
     <svg id="stamp-pigeon" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#eff7f6" stroke="#a8dadc" stroke-width="2"/>
       <path d="M 28,45 Q 45,30 58,40 Q 68,35 72,42 Q 62,55 52,50 Q 42,65 34,58 L 28,45 Z" fill="#fff" stroke="#1d3557" stroke-width="1.5"/>
       <path d="M 58,40 Q 52,20 48,32" stroke="#1d3557" stroke-width="1.5"/>
@@ -229,7 +234,7 @@
 
     <!-- STAMP 3: Flower -->
     <svg id="stamp-flower" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#f7f5fb" stroke="#e27396" stroke-width="2"/>
       <circle cx="50" cy="46" r="6" fill="#ffe169" stroke="#e29578" stroke-width="1.5"/>
       <ellipse cx="50" cy="32" rx="4" ry="8" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
@@ -240,18 +245,18 @@
     </svg>
 
     <!-- STAMP 4: High-Contrast White Postmark -->
-    <svg id="stamp-postmark" viewBox="0 0 100 100" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2.5">
+    <svg id="stamp-postmark" viewBox="0 0 100 100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.5">
       <circle cx="50" cy="50" r="32" stroke-dasharray="10 2 2 2"/>
       <circle cx="50" cy="50" r="26" />
-      <text x="50" y="44" font-family="'Playfair Display', serif" font-weight="bold" font-size="6" fill="rgba(255,255,255,0.9)" text-anchor="middle">LOVE POST</text>
-      <text x="50" y="52" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.9)" text-anchor="middle">25 JUL 2026</text>
-      <text x="50" y="60" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.9)" text-anchor="middle">★ MAIL ★</text>
+      <text x="50" y="44" font-family="'Playfair Display', serif" font-weight="bold" font-size="6" fill="rgba(255,255,255,0.95)" text-anchor="middle">LOVE POST</text>
+      <text x="50" y="52" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">25 JUL 2026</text>
+      <text x="50" y="60" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">★ MAIL ★</text>
       <path d="M 5,25 Q 20,30 35,25 T 65,25 T 95,25" />
       <path d="M 5,75 Q 20,80 35,75 T 65,75 T 95,75" />
     </svg>
 
   </div>
 
-  <script src="app.js?v=20"></script>
+  <script src="app.js?v=30"></script>
 </body>
 </html>

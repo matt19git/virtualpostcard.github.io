@@ -20,7 +20,7 @@
   /* Envelope and Seal Defaults */
   --env-bg: #e27396;
   --env-bg-dark: #b84b6c;
-  --env-text: #fff0f5;
+  --env-text: #ffffff;
   --seal-color: #800f2f;
   
   --border-radius-sm: 8px;
@@ -52,7 +52,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 1500px;
 }
 
 /* --- Desk Backdrop --- */
@@ -158,7 +157,6 @@ body {
   overflow: hidden;
   transition: transform 0.8s var(--spring-easing), opacity 0.5s ease;
   z-index: 10;
-  transform-style: preserve-3d;
 }
 
 /* Paper grain weathering overlay */
@@ -319,7 +317,7 @@ body {
   display: flex;
 }
 
-/* --- Core Toolbar Below the Card (Z-INDEX HIGH TO ALLOW CLICKS) --- */
+/* --- Core Toolbar Below the Card --- */
 .postcard-toolbar {
   position: relative;
   width: 100%;
@@ -453,7 +451,7 @@ body {
   width: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   animation: fadeIn 0.4s ease forwards;
 }
 
@@ -467,14 +465,13 @@ body {
   justify-content: center;
   align-items: center;
   gap: 25px;
-  perspective: 1200px;
 }
 
 .preview-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .preview-label {
@@ -486,8 +483,8 @@ body {
 }
 
 .card-review-spot, .envelope-review-spot {
-  width: 250px;
-  height: 310px;
+  width: 240px;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -498,12 +495,12 @@ body {
 }
 
 .envelope-review-spot {
-  height: 185px;
+  height: 180px;
 }
 
 .postcard-card.in-review {
   position: absolute;
-  transform: scale(0.5) rotate(-3deg);
+  transform: scale(0.48) rotate(-2deg);
   box-shadow: var(--shadow-lg);
   pointer-events: none;
   z-index: 15;
@@ -512,7 +509,7 @@ body {
 .envelope-container.in-review {
   position: absolute;
   display: block;
-  transform: scale(0.48) rotate(3deg);
+  transform: scale(0.46) rotate(2deg);
   pointer-events: auto;
   z-index: 15;
 }
@@ -521,33 +518,33 @@ body {
 .review-form {
   background: rgba(255, 255, 255, 0.95);
   border-radius: var(--border-radius-lg);
-  padding: 24px;
+  padding: 22px;
   box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .review-form h3 {
   font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   color: var(--color-rose-dark);
   text-align: center;
 }
 
 .form-row {
   display: flex;
-  gap: 15px;
+  gap: 12px;
 }
 
 .form-group {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .form-group label {
@@ -560,7 +557,7 @@ body {
 
 .form-input {
   width: 100%;
-  padding: 10px 12px;
+  padding: 9px 12px;
   border: 2px solid #e1d6c7;
   border-radius: var(--border-radius-sm);
   outline: none;
@@ -573,13 +570,46 @@ body {
   border-color: var(--color-rose);
 }
 
-/* --- Single Envelope View (3D Animation) --- */
+/* Envelope Postage Stamp Picker */
+.env-stamp-picker {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 2px;
+}
+
+.env-stamp-opt {
+  width: 44px;
+  height: 44px;
+  padding: 4px;
+  border-radius: var(--border-radius-sm);
+  background: white;
+  border: 2px solid #e1d6c7;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.env-stamp-opt:hover {
+  transform: scale(1.1);
+}
+
+.env-stamp-opt.active {
+  border-color: var(--color-rose-dark);
+  box-shadow: 0 0 0 3px var(--color-rose-light);
+  transform: scale(1.12);
+}
+
+.env-stamp-opt svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Clean 2D Envelope View --- */
 .envelope-container {
   position: relative;
   width: 100%;
   max-width: 500px;
   aspect-ratio: 500 / 370;
-  perspective: 1500px;
   z-index: 12;
   display: none;
   cursor: pointer;
@@ -591,38 +621,16 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.8s var(--spring-easing);
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.envelope.flipped {
-  transform: rotateY(180deg);
-}
-
-.envelope-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
+  background-color: var(--env-bg);
   border-radius: 8px;
   box-shadow: var(--shadow-md);
-  pointer-events: auto;
-}
-
-/* Front Face: Addresses */
-.envelope-front {
-  background-color: var(--env-bg);
+  overflow: visible;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: var(--env-text);
   padding: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .address-lines {
@@ -632,19 +640,28 @@ body {
   width: 75%;
   font-family: 'Playfair Display', serif;
   font-style: italic;
-  font-size: 1.4rem;
-  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  font-size: 1.45rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
   padding-left: 15px;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  z-index: 2;
 }
 
+/* Envelope Top Right Postage Stamp Spot */
 .envelope-stamp-spot {
   position: absolute;
-  top: 25px;
-  right: 30px;
+  top: 22px;
+  right: 25px;
   width: 65px;
   height: 75px;
-  border: 2px dashed rgba(255, 255, 255, 0.25);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .envelope-stamp-spot svg {
@@ -652,13 +669,7 @@ body {
   height: 100%;
 }
 
-/* Back Face: Sealing flaps */
-.envelope-back {
-  background-color: var(--env-bg-dark);
-  transform: rotateY(180deg);
-  overflow: visible;
-}
-
+/* Flaps (2D Flat Envelope) */
 .envelope-flaps {
   position: absolute;
   top: 0;
@@ -671,7 +682,6 @@ body {
 .flap {
   position: absolute;
   background-color: var(--env-bg);
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
 }
 
 .flap.left {
@@ -681,8 +691,8 @@ body {
   height: 0;
   border-top: 185px solid transparent;
   border-bottom: 185px solid transparent;
-  border-left: 250px solid var(--env-bg);
-  z-index: 2;
+  border-left: 250px solid rgba(255, 255, 255, 0.08);
+  z-index: 1;
 }
 
 .flap.right {
@@ -692,8 +702,8 @@ body {
   height: 0;
   border-top: 185px solid transparent;
   border-bottom: 185px solid transparent;
-  border-right: 250px solid var(--env-bg);
-  z-index: 2;
+  border-right: 250px solid rgba(255, 255, 255, 0.08);
+  z-index: 1;
 }
 
 .flap.bottom {
@@ -703,11 +713,10 @@ body {
   height: 0;
   border-left: 250px solid transparent;
   border-right: 250px solid transparent;
-  border-bottom: 200px solid var(--env-bg-dark);
+  border-bottom: 200px solid rgba(0, 0, 0, 0.06);
   z-index: 1;
 }
 
-/* Top flap */
 .flap.top {
   top: 0;
   left: 0;
@@ -715,7 +724,7 @@ body {
   height: 0;
   border-left: 250px solid transparent;
   border-right: 250px solid transparent;
-  border-top: 200px solid var(--env-bg);
+  border-top: 200px solid var(--env-bg-dark);
   transform-origin: top center;
   transition: transform 0.6s ease;
   z-index: 3;
@@ -726,7 +735,7 @@ body {
   z-index: 0;
 }
 
-/* --- Wax Seal --- */
+/* Wax Seal at the center top flap tip */
 .wax-seal {
   position: absolute;
   top: 160px;
@@ -889,25 +898,25 @@ dialog::backdrop {
 @media (max-width: 600px) {
   .previews-container {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
   }
   
   .card-review-spot {
-    width: 180px;
-    height: 220px;
+    width: 170px;
+    height: 210px;
   }
   
   .envelope-review-spot {
-    width: 220px;
-    height: 160px;
+    width: 200px;
+    height: 145px;
   }
   
   .postcard-card.in-review {
-    transform: scale(0.38) rotate(-3deg);
+    transform: scale(0.36) rotate(-2deg);
   }
 
   .envelope-container.in-review {
-    transform: scale(0.42) rotate(3deg);
+    transform: scale(0.38) rotate(2deg);
   }
   
   .postcard-card {

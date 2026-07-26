@@ -1,21 +1,22 @@
-// app.js - Streamlined & Unified Postcard Logic
+// app.js - Streamlined & Unified Postcard Logic for Ashlyn & Matt
 
 (function() {
   
   // --- App State ---
   const state = {
-    brushColor: '#800f2f', // default Crimson
+    brushColor: '#800f2f',       // default Crimson
     isDrawing: false,
-    strokes: [],           // [{ color, points: [[x, y], ...] }] (relative 0-1000 coordinates)
+    strokes: [],                 // [{ color, points: [[x, y], ...] }] (relative 0-1000 coordinates)
     
-    stamps: [],            // [{ id, x, y, scale, rotation, el }] (relative 0-100% of card)
+    stamps: [],                  // [{ id, x, y, scale, rotation, el }] (relative 0-100% of card)
     selectedStamp: null,
+    selectedEnvStamp: 'stamp-heart', // default postage stamp for envelope top right
     
-    isRecipientView: false, // true if loading a postcard from URL
-    isOpening: false        // lock flag during open animation
+    isRecipientView: false,      // true if loading a postcard from URL
+    isOpening: false             // lock flag during open animation
   };
 
-  const STAMP_SVGS = {};   // SVG elements lookup table for canvas exports
+  const STAMP_SVGS = {};         // SVG elements lookup table for canvas exports
 
   // Core Stamps Tray configuration
   const STAMPS_LIST = [
@@ -37,8 +38,8 @@
   // --- DOM Elements ---
   let canvas, ctx;
   let postcardCard, letterTextarea;
-  let stampsOverlay, stampsTray;
-  let envelopeContainer, envelopeEl, waxSealEl;
+  let stampsOverlay, stampsTray, envStampPicker;
+  let envelopeContainer, envelopeEl, waxSealEl, envelopeStampSpot;
   let viewEditor, viewReviewDesk, viewRecipient, recipientHelpText;
   let shareModal, toastNotification;
   
@@ -51,6 +52,7 @@
     setupEventListeners();
     setupCanvas();
     populateToolbar();
+    populateEnvStampPicker();
     checkUrlHash();
   });
 
@@ -61,9 +63,12 @@
     letterTextarea = document.getElementById('letter-textarea');
     stampsOverlay = document.getElementById('stamps-overlay');
     stampsTray = document.getElementById('stamps-picker');
+    envStampPicker = document.getElementById('env-stamp-picker');
+    
     envelopeContainer = document.getElementById('envelope-container');
     envelopeEl = document.getElementById('envelope');
     waxSealEl = document.getElementById('wax-seal-element');
+    envelopeStampSpot = document.getElementById('envelope-stamp-spot');
     
     viewEditor = document.getElementById('view-editor');
     viewReviewDesk = document.getElementById('view-review-desk');
@@ -111,15 +116,8 @@
     document.getElementById('btn-email-link').addEventListener('click', emailShareLink);
     document.getElementById('btn-download-postcard').addEventListener('click', downloadPostcardImage);
 
-    // Review desk envelope click to flip preview
-    envelopeEl.addEventListener('click', (e) => {
-      if (!state.isRecipientView) {
-        envelopeEl.classList.toggle('flipped');
-      }
-    });
-
     // Recipient View: Click ANYWHERE on envelope container to open letter!
-    envelopeContainer.addEventListener('click', (e) => {
+    envelopeContainer.addEventListener('click', () => {
       if (state.isRecipientView) {
         crackSealAndReveal();
       }
@@ -142,7 +140,7 @@
     const inputFrom = document.getElementById('input-from');
     
     inputTo.addEventListener('input', () => {
-      document.getElementById('display-to').textContent = `To: ${inputTo.value.trim() || 'Sarah'}`;
+      document.getElementById('display-to').textContent = `To: ${inputTo.value.trim() || 'Ashlyn'}`;
     });
     inputFrom.addEventListener('input', () => {
       document.getElementById('display-from').textContent = `From: ${inputFrom.value.trim() || 'Matt'}`;
@@ -154,6 +152,7 @@
 
   // --- Populate Colors and Stamps UI ---
   function populateToolbar() {
+    // Colors
     const paletteContainer = document.getElementById('colors-palette');
     paletteContainer.innerHTML = '';
     BRUSH_COLORS.forEach((color, idx) => {
@@ -172,7 +171,7 @@
       paletteContainer.appendChild(dot);
     });
 
-    // Stamps
+    // Stamps for Doodle Card
     stampsTray.innerHTML = '';
     STAMPS_LIST.forEach(stamp => {
       const stampThumb = document.createElement('div');
@@ -194,6 +193,43 @@
       });
       stampsTray.appendChild(stampThumb);
     });
+  }
+
+  // Populate Envelope Postage Stamp Selector on Address Desk
+  function populateEnvStampPicker() {
+    if (!envStampPicker) return;
+    envStampPicker.innerHTML = '';
+    
+    STAMPS_LIST.forEach(stamp => {
+      const opt = document.createElement('div');
+      opt.className = 'env-stamp-opt' + (stamp.id === state.selectedEnvStamp ? ' active' : '');
+      opt.dataset.id = stamp.id;
+      opt.title = `Envelope Stamp: ${stamp.label}`;
+      
+      const svgTemplate = document.getElementById(stamp.id);
+      if (svgTemplate) {
+        opt.innerHTML = svgTemplate.outerHTML;
+      }
+
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.env-stamp-opt').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        state.selectedEnvStamp = stamp.id;
+        updateEnvelopeStampDisplay(stamp.id);
+      });
+
+      envStampPicker.appendChild(opt);
+    });
+
+    updateEnvelopeStampDisplay(state.selectedEnvStamp);
+  }
+
+  function updateEnvelopeStampDisplay(stampId) {
+    const template = document.getElementById(stampId);
+    if (template && envelopeStampSpot) {
+      envelopeStampSpot.innerHTML = template.outerHTML;
+    }
   }
 
   // --- Drawing Canvas Handler ---
@@ -337,7 +373,7 @@
     }
   }
 
-  // --- SVG Stamp Manager (Draggable) ---
+  // --- SVG Stamp Manager (Draggable on Card) ---
   function placeStampOnCard(stampId) {
     const template = document.getElementById(stampId);
     if (!template) return;
@@ -510,13 +546,13 @@
     envelopeContainer.className = 'envelope-container in-review';
     envelopeContainer.style.display = 'block';
     
-    const toName = document.getElementById('input-to').value.trim() || 'Sarah';
+    // Front address defaults: Ashlyn & Matt
+    const toName = document.getElementById('input-to').value.trim() || 'Ashlyn';
     const fromName = document.getElementById('input-from').value.trim() || 'Matt';
     document.getElementById('display-to').textContent = `To: ${toName}`;
     document.getElementById('display-from').textContent = `From: ${fromName}`;
-    document.getElementById('envelope-stamp-spot').innerHTML = document.getElementById('stamp-postmark').outerHTML;
     
-    envelopeEl.classList.remove('flipped');
+    updateEnvelopeStampDisplay(state.selectedEnvStamp);
     
     waxSealEl.classList.remove('broken');
     waxSealEl.style.display = 'flex';
@@ -539,7 +575,7 @@
     resizeCanvas();
   }
 
-  // --- MAILING ANIMATION FLOW ---
+  // --- MAILING ANIMATION FLOW (NO FLIPPING) ---
   function triggerMailingAnimation() {
     document.querySelector('.review-form').style.display = 'none';
     
@@ -554,44 +590,43 @@
     
     envelopeContainer.style.position = 'absolute';
     envelopeContainer.style.transform = 'scale(1) translateY(0)';
-    
-    envelopeEl.classList.remove('flipped');
 
     setTimeout(() => {
+      // 1. Card slides down behind envelope
       postcardCard.style.transition = 'all 0.9s ease-in-out';
-      postcardCard.style.transform = 'translateY(200px) scale(0.48) rotateX(15deg)';
+      postcardCard.style.transform = 'translateY(200px) scale(0.48)';
       postcardCard.style.opacity = '0';
 
       setTimeout(() => {
         postcardCard.style.display = 'none';
-        envelopeEl.classList.add('flipped');
+
+        // 2. Top flap folds down
+        const topFlap = envelopeEl.querySelector('.flap.top');
+        topFlap.style.transform = 'rotateX(0deg)';
+        topFlap.style.zIndex = '3';
 
         setTimeout(() => {
-          const topFlap = envelopeEl.querySelector('.flap.top');
-          topFlap.style.transform = 'rotateX(0deg)';
-          topFlap.style.zIndex = '3';
-
+          // 3. Wax seal stamps down in center
+          waxSealEl.style.opacity = '0';
+          waxSealEl.style.transform = 'scale(2.2) translate(-50%, -50%)';
+          waxSealEl.style.display = 'flex';
+          
           setTimeout(() => {
-            waxSealEl.style.opacity = '0';
-            waxSealEl.style.transform = 'scale(2.2) translate(-50%, -50%)';
-            waxSealEl.style.display = 'flex';
-            
+            waxSealEl.style.transition = 'all 0.3s var(--bounce-easing)';
+            waxSealEl.style.opacity = '1';
+            waxSealEl.style.transform = 'scale(1)';
+
+            // 4. Envelope flies off screen
             setTimeout(() => {
-              waxSealEl.style.transition = 'all 0.3s var(--bounce-easing)';
-              waxSealEl.style.opacity = '1';
-              waxSealEl.style.transform = 'scale(1)';
+              envelopeContainer.style.transition = 'all 1.1s var(--spring-easing)';
+              envelopeContainer.style.transform = 'translateY(-1000px) scale(0.4)';
+              envelopeContainer.style.opacity = '0';
+              
+              setTimeout(openShareDialog, 1000);
+            }, 1200);
 
-              setTimeout(() => {
-                envelopeContainer.style.transition = 'all 1.1s var(--spring-easing)';
-                envelopeContainer.style.transform = 'translateY(-1000px) rotate(-15deg) scale(0.4)';
-                envelopeContainer.style.opacity = '0';
-                
-                setTimeout(openShareDialog, 1000);
-              }, 1200);
-
-            }, 100);
-          }, 600);
-        }, 850);
+          }, 100);
+        }, 600);
       }, 700);
     }, 200);
   }
@@ -606,8 +641,9 @@
   function generateMagicLink() {
     const letterObj = {
       t: letterTextarea.value,
-      to: document.getElementById('input-to').value.trim(),
-      fr: document.getElementById('input-from').value.trim(),
+      to: document.getElementById('input-to').value.trim() || 'Ashlyn',
+      fr: document.getElementById('input-from').value.trim() || 'Matt',
+      es: state.selectedEnvStamp, // envelope postage stamp ID
       st: state.stamps.map(s => ({
         id: s.id,
         x: Math.round(s.x),
@@ -673,12 +709,12 @@
     letterTextarea.value = data.t || '';
     letterTextarea.readOnly = true;
 
-    document.getElementById('input-to').value = data.to || '';
-    document.getElementById('input-from').value = data.fr || '';
-    document.getElementById('input-to').readOnly = true;
-    document.getElementById('input-from').readOnly = true;
+    const to = data.to || 'Ashlyn';
+    const from = data.fr || 'Matt';
+    document.getElementById('input-to').value = to;
+    document.getElementById('input-from').value = from;
 
-    // Load stamps
+    // Load card stamps
     stampsOverlay.innerHTML = '';
     state.stamps = [];
     if (data.st) {
@@ -711,11 +747,13 @@
     postcardCard.style.transform = 'translateY(150px) scale(0.6)';
     postcardCard.style.opacity = '0';
 
-    const to = data.to || 'Sarah';
-    const from = data.fr || 'Matt';
+    // Populate recipient envelope details
     document.getElementById('display-to').textContent = `To: ${to}`;
     document.getElementById('display-from').textContent = `From: ${from}`;
-    document.getElementById('envelope-stamp-spot').innerHTML = document.getElementById('stamp-postmark').outerHTML;
+    
+    // Load chosen envelope postage stamp
+    const envStampId = data.es || 'stamp-heart';
+    updateEnvelopeStampDisplay(envStampId);
 
     viewRecipient.insertBefore(envelopeContainer, document.getElementById('recipient-action-panel'));
 
@@ -730,9 +768,8 @@
 
     envelopeContainer.removeAttribute('style');
     envelopeContainer.style.display = 'block';
-    envelopeEl.classList.remove('flipped');
 
-    recipientHelpText.textContent = "You received a letter! Click anywhere on the envelope to open. 💌";
+    recipientHelpText.textContent = "You received a letter! Click the envelope to open. 💌";
 
     document.getElementById('view-home').classList.remove('active');
     document.getElementById('view-editor').classList.remove('active');
@@ -741,7 +778,7 @@
     resizeCanvas();
   }
 
-  // --- Crack Seal and slide out letter ---
+  // --- Crack Seal and slide out letter (NO FLIP) ---
   function crackSealAndReveal() {
     if (!state.isRecipientView || state.isOpening) return;
     state.isOpening = true;
@@ -797,7 +834,7 @@
 
   function emailShareLink() {
     const link = document.getElementById('share-link-input').value;
-    const to = document.getElementById('input-to').value.trim() || 'Sarah';
+    const to = document.getElementById('input-to').value.trim() || 'Ashlyn';
     const subject = encodeURIComponent("A virtual letter for you! 💌");
     const body = encodeURIComponent(`Hi ${to},\n\nI wrote and drew a virtual letter for you. Open it here:\n\n${link}\n\nWith love.`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;

@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Mobile Safari Centered Mailing Animation
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Mobile Viewport Centering for Both Mailing & Recipient Opening
 
 (function() {
   
@@ -836,7 +836,16 @@
     const topFlap = envelopeEl.querySelector('.flap.top');
     topFlap.removeAttribute('style');
 
+    const screenWidth = window.innerWidth;
+    const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;
+
+    // Viewport Centering for Mobile Recipient View
     envelopeContainer.removeAttribute('style');
+    envelopeContainer.style.position = 'fixed';
+    envelopeContainer.style.top = '45%';
+    envelopeContainer.style.left = '50%';
+    envelopeContainer.style.margin = '0';
+    envelopeContainer.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
     envelopeContainer.style.display = 'block';
 
     recipientHelpText.textContent = "You received a letter! Click the envelope to open. 📬";
@@ -854,6 +863,9 @@
     state.isOpening = true;
     
     recipientHelpText.style.display = 'none';
+
+    const screenWidth = window.innerWidth;
+    const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;
 
     // 1. Smooth 3D Flip Envelope from Front to Back
     envelopeEl.classList.add('show-back');
@@ -873,25 +885,35 @@
 
         setTimeout(() => {
           // 4. Letter card slides out smoothly
-          viewRecipient.insertBefore(postcardCard, document.getElementById('recipient-action-panel'));
+          viewRecipient.appendChild(postcardCard);
           postcardCard.style.display = 'flex';
-          postcardCard.style.position = 'relative';
-          postcardCard.style.transform = 'translateY(120px) scale(0.7)';
+          postcardCard.style.position = 'fixed';
+          postcardCard.style.top = '48%';
+          postcardCard.style.left = '50%';
+          postcardCard.style.margin = '0';
+          postcardCard.style.transform = `translate(-50%, calc(-50% + 50px)) scale(${baseScale * 0.7})`;
           postcardCard.style.opacity = '0';
+          postcardCard.style.zIndex = '20';
           resizeCanvas();
 
           setTimeout(() => {
             postcardCard.style.transition = 'all 1.0s var(--spring-easing)';
-            postcardCard.style.transform = 'translateY(0) scale(1)';
+            postcardCard.style.transform = `translate(-50%, -50%) scale(${baseScale})`;
             postcardCard.style.opacity = '1';
-            postcardCard.style.zIndex = '20';
 
             envelopeContainer.style.transition = 'all 0.8s ease';
-            envelopeContainer.style.transform = 'scale(0.8) translateY(100px)';
+            envelopeContainer.style.transform = `translate(-50%, calc(-50% + 140px)) scale(${baseScale * 0.7})`;
             envelopeContainer.style.opacity = '0';
             
             setTimeout(() => {
               envelopeContainer.style.display = 'none';
+              
+              // Enable scrolling for letter reading if text is long
+              postcardCard.style.position = 'relative';
+              postcardCard.style.top = 'auto';
+              postcardCard.style.left = 'auto';
+              postcardCard.style.transform = `scale(${baseScale})`;
+
               document.getElementById('recipient-action-panel').style.display = 'flex';
             }, 800);
 

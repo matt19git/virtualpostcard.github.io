@@ -167,13 +167,14 @@ body {
   z-index: 10;
   margin: 0 auto;
   flex-shrink: 0;
-  transform-origin: center top;
+  transform-origin: center center;
 }
 
 /* Container automatic scale adjustment on mobile viewports */
 @media (max-width: 640px) {
   .postcard-card {
     transform: scale(calc((100vw - 32px) / 600));
+    transform-origin: center center;
   }
 }
 
@@ -648,11 +649,13 @@ body {
   overflow: hidden;
 }
 
+/* Explicit Center Center Transform Origin for Perfect Preview Centering */
 .postcard-card.in-review {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.416666);
+  transform: translate(-50%, -50%) scale(0.416666) !important;
+  transform-origin: center center !important;
   box-shadow: var(--shadow-lg);
   pointer-events: none;
   z-index: 15;
@@ -663,7 +666,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.416666);
+  transform: translate(-50%, -50%) scale(0.416666) !important;
+  transform-origin: center center !important;
   pointer-events: auto;
   z-index: 15;
   margin: 0;
@@ -1083,11 +1087,13 @@ dialog::backdrop {
   }
   
   .postcard-card.in-review {
-    transform: translate(-50%, -50%) scale(0.28);
+    transform: translate(-50%, -50%) scale(0.233333) !important;
+    transform-origin: center center !important;
   }
 
   .envelope-container.in-review {
-    transform: translate(-50%, -50%) scale(0.28);
+    transform: translate(-50%, -50%) scale(0.233333) !important;
+    transform-origin: center center !important;
   }
   
   .toolbar-row {

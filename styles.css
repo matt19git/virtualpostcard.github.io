@@ -31,7 +31,7 @@
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.25);
   
-  --spring-easing: linear(0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%, 1.565 8.2%, 1.585 8.8%, 1.581 9.3%, 1.458 10.9%, 0.784 15.5%, 0.693 16.6%, 0.67 17.1%, 0.657 17.7%, 0.671 18.7%, 0.729 19.8%, 1.042 23.3%, 1.13 24.5%, 1.182 25.6%, 1.201 26.7%, 1.192 27.7%, 1.156 28.8%, 0.977 32.2%, 0.925 33.4%, 0.894 34.5%, 0.882 35.6%, 0.887 36.6%, 0.907 37.7%, 1.045 42.4%, 1.069 44.5%, 1.059 46.3%, 0.979 50.9%, 0.96 53.4%, 0.966 55.3%, 1.013 59.9%, 1.024 62.3%, 0.986 71.2%, 1.008 79.9%, 0.995 88.9%, 1);
+  --spring-easing: linear(0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%, 1.565 8.2%, 1.585 8.8%, 1.581 9.3%, 1.458 10.9%, 0.784 15.5%, 0.693 16.6%, 0.67 17.1%, 0.657 17.7%, 0.729 19.8%, 1.042 23.3%, 1.13 24.5%, 1.182 25.6%, 1.201 26.7%, 1.192 27.7%, 1.156 28.8%, 0.977 32.2%, 0.925 33.4%, 0.894 34.5%, 0.882 35.6%, 0.887 36.6%, 0.907 37.7%, 1.045 42.4%, 1.069 44.5%, 1.059 46.3%, 0.979 50.9%, 0.96 53.4%, 0.966 55.3%, 1.013 59.9%, 1.024 62.3%, 0.986 71.2%, 1.008 79.9%, 0.995 88.9%, 1);
   --bounce-easing: linear(0, 0.214 14.7%, 0.386 23.7%, 0.598 31.9%, 0.999 44.7%, 0.807 52.6%, 0.762 56%, 0.747 59.4%, 0.758 62.4%, 0.793 65.6%, 0.999 77.4%, 0.961 81.2%, 0.949 84.8%, 0.956 88%, 0.993 95.5%, 1);
 }
 
@@ -742,10 +742,6 @@ body {
   transition: transform 0.8s var(--spring-easing);
 }
 
-.envelope.show-back {
-  transform: rotateY(180deg);
-}
-
 .envelope-side {
   position: absolute;
   top: 0;
@@ -754,30 +750,43 @@ body {
   height: 100%;
   background-color: var(--env-bg);
   border-radius: 12px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.envelope-side * {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-/* Front Side: Clean Envelope Face with Address & Top-Right Stamp */
+/* Strict Opacity & Visibility Rules for 100% Fail-Safe Front/Back Toggle */
 .envelope-front-side {
   z-index: 2;
   transform: rotateY(0deg);
+  opacity: 1 !important;
+  visibility: visible !important;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* Back Side: Envelope Vector SVG Flaps & Center Wax Seal */
 .envelope-back-side {
   z-index: 1;
   transform: rotateY(180deg);
+  opacity: 0 !important;
+  visibility: hidden !important;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+.envelope.show-back {
+  transform: rotateY(180deg);
+}
+
+.envelope.show-back .envelope-front-side {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.envelope.show-back .envelope-back-side {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
 }
 
 .envelope-flaps-svg {
@@ -804,8 +813,7 @@ body {
   position: absolute;
   top: 50%;
   left: 42px;
-  transform: translateY(-50%) translateZ(0);
-  -webkit-transform: translateY(-50%) translateZ(0);
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -819,8 +827,6 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,0.2);
   z-index: 4;
   pointer-events: none;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 /* Front Side: Real Postage Stamp in Top Right */
@@ -836,8 +842,6 @@ body {
   z-index: 5;
   background: transparent;
   overflow: visible;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .envelope-stamp-spot img {
@@ -846,8 +850,6 @@ body {
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   transform: rotate(3deg);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 /* Back Side: Wax Seal at the center top flap tip */
@@ -871,8 +873,6 @@ body {
   transition: transform 0.4s var(--bounce-easing), opacity 0.3s ease;
   background: radial-gradient(circle at 35% 35%, #b7094c 0%, #800f2f 80%);
   pointer-events: auto;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }
 
 .wax-seal:hover {
@@ -894,11 +894,13 @@ body {
 /* Help text for recipient */
 .recipient-help-text {
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   font-size: 1.25rem;
   font-weight: 700;
   text-shadow: 0 2px 4px rgba(0,0,0,0.4);
   text-align: center;
+  position: relative;
+  z-index: 20;
   animation: pulse 2s infinite ease-in-out;
 }
 

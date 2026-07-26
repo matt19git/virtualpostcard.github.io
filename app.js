@@ -590,7 +590,6 @@
     envelopeContainer.className = 'envelope-container in-review';
     envelopeContainer.style.display = 'block';
     
-    document.querySelector('.envelope-front-side').style.display = 'block';
     envelopeEl.classList.remove('show-back'); // Show FRONT of envelope (Address + Postage Stamp)
     
     const toName = document.getElementById('input-to').value.trim() || 'Name Here';
@@ -670,9 +669,6 @@
 
         // 2. Flip envelope 3D to show BACK FLAP & WAX SEAL
         envelopeEl.classList.add('show-back');
-        setTimeout(() => {
-          document.querySelector('.envelope-front-side').style.display = 'none';
-        }, 350);
 
         // 3. Top flap folds down
         envelopeEl.classList.remove('open');
@@ -832,7 +828,6 @@
     viewRecipient.insertBefore(envelopeContainer, document.getElementById('recipient-action-panel'));
 
     // RECIPIENT INITIALLY SEES FRONT SIDE (To/From Addresses + Postage Stamp)
-    document.querySelector('.envelope-front-side').style.display = 'block';
     envelopeEl.classList.remove('show-back');
     envelopeEl.classList.remove('open');
 
@@ -874,11 +869,6 @@
 
     // 1. Smooth 3D Flip Envelope from Front to Back
     envelopeEl.classList.add('show-back');
-    
-    // Hide front side element during flip so iOS Safari never bleeds child text through 3D plane
-    setTimeout(() => {
-      document.querySelector('.envelope-front-side').style.display = 'none';
-    }, 350);
 
     setTimeout(() => {
       // 2. Crack open Wax Seal on back flap

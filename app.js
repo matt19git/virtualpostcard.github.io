@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Vector SVG Envelope Flaps & Unified Mobile Scrolling
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Synchronized Text & Sticker Mobile Scrolling
 
 (function() {
   
@@ -42,7 +42,7 @@
 
   // --- DOM Elements ---
   let canvas, ctx;
-  let postcardCard, letterTextarea;
+  let postcardCard, letterTextarea, letterTextDisplay;
   let stampsOverlay, stampsTray, envStampPicker;
   let btnModeType, btnModeDraw;
   let envelopeContainer, envelopeEl, waxSealEl, envelopeStampSpot;
@@ -68,6 +68,7 @@
     ctx = canvas.getContext('2d');
     postcardCard = document.getElementById('postcard-card');
     letterTextarea = document.getElementById('letter-textarea');
+    letterTextDisplay = document.getElementById('letter-text-display');
     stampsOverlay = document.getElementById('stamps-overlay');
     stampsTray = document.getElementById('stamps-picker');
     envStampPicker = document.getElementById('env-stamp-picker');
@@ -606,6 +607,7 @@
 
   function backToEditor() {
     postcardCard.removeAttribute('style');
+    postcardCard.classList.remove('recipient-mode');
     envelopeContainer.removeAttribute('style');
 
     document.getElementById('view-editor').insertBefore(postcardCard, document.querySelector('.postcard-toolbar'));
@@ -772,7 +774,9 @@
 
   function loadReceivedLetter(data) {
     letterTextarea.value = data.t || '';
-    letterTextarea.readOnly = true;
+    if (letterTextDisplay) {
+      letterTextDisplay.textContent = data.t || '';
+    }
 
     const to = data.to || 'Name Here';
     const from = data.fr || 'Name Here';
@@ -900,8 +904,8 @@
             setTimeout(() => {
               envelopeContainer.style.display = 'none';
               
-              // Lock all child elements (canvas, textarea, stickers) into unified smooth scrolling paper sheet
-              postcardCard.className = 'postcard-card scrollable-card';
+              // Enable recipient static text display & unified scrolling
+              postcardCard.classList.add('recipient-mode');
               postcardCard.style.position = 'relative';
               postcardCard.style.top = 'auto';
               postcardCard.style.left = 'auto';

@@ -156,10 +156,35 @@ body {
   margin: 0 auto;
 }
 
-/* Smooth Scrolling Wrapper for Received Letter Reading */
-.postcard-card.scrollable-card {
+/* Inner Unified Scroll Body */
+.postcard-scroll-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Recipient Reading Mode: Card Scrolls Entire Body (Text + Doodles + Stickers Synchronized) */
+.postcard-card.recipient-mode {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.postcard-card.recipient-mode .postcard-scroll-body {
+  min-height: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.postcard-card.recipient-mode .postcard-textarea {
+  display: none;
+}
+
+.postcard-card.recipient-mode .postcard-text-display {
+  display: block;
 }
 
 /* Paper grain weathering overlay */
@@ -193,6 +218,22 @@ body {
   line-height: 1.5;
   color: var(--color-charcoal);
   z-index: 1;
+}
+
+/* Static Text Display for Recipient View (Expands height naturally) */
+.postcard-text-display {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  padding: 38px;
+  font-family: 'Caveat', cursive;
+  font-size: 2.15rem;
+  line-height: 1.5;
+  color: var(--color-charcoal);
+  white-space: pre-wrap;
+  word-break: break-word;
+  z-index: 1;
+  display: none;
 }
 
 /* Full Sheet Canvas over Textarea */

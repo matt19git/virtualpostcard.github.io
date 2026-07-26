@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Unique SVG Instance Scoping
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Realistic Front & Back Envelope Sides
 
 (function() {
   
@@ -100,7 +100,6 @@
     const uniqueId = 'stk_' + Math.random().toString(36).substr(2, 7);
     let html = templateEl.outerHTML;
     
-    // Replace IDs and url(#id) references
     html = html.replace(/id="([^"]+)"/g, (m, idStr) => {
       if (idStr === stickerId) return '';
       return `id="${idStr}_${uniqueId}"`;
@@ -583,6 +582,7 @@
     envelopeReviewSpot.appendChild(envelopeContainer);
     envelopeContainer.className = 'envelope-container in-review';
     envelopeContainer.style.display = 'block';
+    envelopeEl.classList.remove('show-back'); // Show FRONT of envelope (Address + Postage Stamp)
     
     const toName = document.getElementById('input-to').value.trim() || 'Name Here';
     const fromName = document.getElementById('input-from').value.trim() || 'Name Here';
@@ -637,13 +637,16 @@
       setTimeout(() => {
         postcardCard.style.display = 'none';
 
-        // 2. Top flap folds down
+        // 2. Flip envelope to show BACK FLAP & WAX SEAL
+        envelopeEl.classList.add('show-back');
+
+        // 3. Top flap folds down
         const topFlap = envelopeEl.querySelector('.flap.top');
         topFlap.style.transform = 'rotateX(0deg)';
         topFlap.style.zIndex = '3';
 
         setTimeout(() => {
-          // 3. Wax seal stamps down in center
+          // 4. Wax seal stamps down in center
           waxSealEl.style.opacity = '0';
           waxSealEl.style.transform = 'scale(2.2) translate(-50%, -50%)';
           waxSealEl.style.display = 'flex';
@@ -653,7 +656,7 @@
             waxSealEl.style.opacity = '1';
             waxSealEl.style.transform = 'scale(1) translateX(-50%)';
 
-            // 4. Envelope flies off screen
+            // 5. Envelope flies off screen
             setTimeout(() => {
               envelopeContainer.style.transition = 'all 1.1s var(--spring-easing)';
               envelopeContainer.style.transform = 'translateY(-1000px) scale(0.4)';
@@ -793,6 +796,8 @@
     updateEnvelopeStampDisplay(envStampId);
 
     viewRecipient.insertBefore(envelopeContainer, document.getElementById('recipient-action-panel'));
+
+    envelopeEl.classList.add('show-back'); // Recipient sees sealed BACK side with Wax Seal!
 
     waxSealEl.className = 'wax-seal';
     waxSealEl.classList.remove('broken');

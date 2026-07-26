@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=160">
+  <link rel="stylesheet" href="styles.css?v=170">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -97,7 +97,7 @@
             </div>
           </div>
           
-          <!-- Right Spot: Envelope Preview -->
+          <!-- Right Spot: Envelope Front Preview -->
           <div class="preview-box">
             <span class="preview-label">Envelope Preview</span>
             <div class="envelope-review-spot" id="envelope-review-spot">
@@ -145,31 +145,33 @@
     <div id="view-recipient" class="view-panel">
       <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 📬</div>
       
-      <!-- Envelope Container (Clean 2D Vector Envelope) -->
+      <!-- Envelope Container (Clean 2D Vector Envelope with Front & Back Sides) -->
       <div class="envelope-container" id="envelope-container">
         <div class="envelope env-pink" id="envelope">
           
-          <div class="envelope-flaps">
-            <div class="flap left"></div>
-            <div class="flap right"></div>
-            <div class="flap bottom"></div>
-            <div class="flap top"></div>
+          <!-- FRONT SIDE OF ENVELOPE: Address Lines & Top-Right Postage Stamp (No Flaps/Seal) -->
+          <div class="envelope-side envelope-front-side">
+            <div class="envelope-stamp-spot" id="envelope-stamp-spot"></div>
+            <div class="address-lines">
+              <div id="display-to">To: Name Here</div>
+              <div id="display-from">From: Name Here</div>
+            </div>
           </div>
 
-          <!-- Top Right Real Postage Stamp -->
-          <div class="envelope-stamp-spot" id="envelope-stamp-spot"></div>
-
-          <!-- Center Address -->
-          <div class="address-lines">
-            <div id="display-to">To: Name Here</div>
-            <div id="display-from">From: Name Here</div>
+          <!-- BACK SIDE OF ENVELOPE: Flaps & Wax Seal (Used during sealing & opening) -->
+          <div class="envelope-side envelope-back-side">
+            <div class="envelope-flaps">
+              <div class="flap left"></div>
+              <div class="flap right"></div>
+              <div class="flap bottom"></div>
+              <div class="flap top"></div>
+            </div>
+            <!-- Clickable Wax Seal on Back Flap -->
+            <div class="wax-seal" id="wax-seal-element">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(0,0,0,0.35)"/></svg>
+            </div>
           </div>
 
-          <!-- Dynamic Clickable Wax Seal -->
-          <div class="wax-seal" id="wax-seal-element">
-            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="rgba(0,0,0,0.35)"/></svg>
-          </div>
-          
         </div>
       </div>
 
@@ -226,13 +228,9 @@
         <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.18"/>
       </filter>
       <g filter="url(#shadow-heart-clean)">
-        <!-- White Vinyl Die-Cut Border -->
         <path d="M 50,30 C 50,13 28,8 17,25 C 2,47 33,68 50,87 C 67,68 98,47 83,25 C 72,8 50,13 50,30 Z" fill="#ffffff" stroke="#ffffff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
-        <!-- Heart Body with Rich Gradient -->
         <path d="M 50,30 C 50,15 30,10 20,25 C 5,45 35,65 50,85 C 65,65 95,45 80,25 C 70,10 50,15 50,30 Z" fill="url(#grad-heart-cute)"/>
-        <!-- Cute Glossy Highlight -->
         <path d="M 28,25 C 22,30 20,40 24,48 C 22,42 22,32 28,27 C 33,23 40,22 44,25 C 38,22 32,22 28,25 Z" fill="#ffffff" opacity="0.6"/>
-        <!-- Cute Little Sparkle Detail on Corner -->
         <path d="M 74,18 L 76,24 L 82,26 L 76,28 L 74,34 L 72,28 L 66,26 L 72,24 Z" fill="#ffffff" opacity="0.9"/>
       </g>
       <defs>
@@ -279,6 +277,6 @@
 
   </div>
 
-  <script src="app.js?v=160"></script>
+  <script src="app.js?v=170"></script>
 </body>
 </html>

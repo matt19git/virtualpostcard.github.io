@@ -4,9 +4,9 @@
   
   // --- App State ---
   const state = {
+    activeMode: 'type',          // 'type' (edit text like normal) or 'draw' (pen doodle)
     brushColor: '#800f2f',       // default Crimson
     isDrawing: false,
-    isClickCandidate: false,
     strokes: [],                 // [{ color, points: [[x, y], ...] }] (relative 0-1000 coordinates)
     
     stamps: [],                  // [{ id, x, y, scale, rotation, el }] (relative 0-100% of card)
@@ -40,6 +40,7 @@
   let canvas, ctx;
   let postcardCard, letterTextarea;
   let stampsOverlay, stampsTray, envStampPicker;
+  let btnModeType, btnModeDraw;
   let envelopeContainer, envelopeEl, waxSealEl, envelopeStampSpot;
   let viewEditor, viewReviewDesk, viewRecipient, recipientHelpText;
   let shareModal, toastNotification;
@@ -54,6 +55,7 @@
     setupCanvas();
     populateToolbar();
     populateEnvStampPicker();
+    setMode('type'); // Default to typing mode so cursor works like normal text
     checkUrlHash();
   });
 
@@ -65,6 +67,9 @@
     stampsOverlay = document.getElementById('stamps-overlay');
     stampsTray = document.getElementById('stamps-picker');
     envStampPicker = document.getElementById('env-stamp-picker');
+
+    btnModeType = document.getElementById('btn-mode-text');
+    btnModeDraw = document.getElementById('btn-mode-draw');
     
     envelopeContainer = document.getElementById('envelope-container');
     envelopeEl = document.getElementById('envelope');
@@ -84,6 +89,10 @@
   }
 
   function setupEventListeners() {
+    // Mode Buttons
+    btnModeType.addEventListener('click', () => setMode('type'));
+    btnModeDraw.addEventListener('click', () => setMode('draw'));
+
     // Start Writing / Create Postcard Button
     const btnWrite = document.getElementById('btn-write-letter');
     if (btnWrite) {
@@ -151,22 +160,52 @@
     window.addEventListener('resize', resizeCanvas);
   }
 
+  // --- Mode Manager (Type vs Draw) ---
+  function setMode(mode) {
+    state.activeMode = mode;
+
+    if (mode === 'type') {
+      btnModeType.classList.add('active');
+      btnModeDraw.classList.remove('active');
+      canvas.classList.remove('drawing-active');
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    } else {
+      btnModeDraw.classList.add('active');
+      btnModeType.classList.remove('active');
+      canvas.classList.add('drawing-active');
+      
+      // Highlight active color dot
+      document.querySelectorAll('.color-dot').forEach(d => {
+        if (d.dataset.color === state.brushColor) {
+          d.classList.add('active');
+        } else {
+          d.classList.remove('active');
+        }
+      });
+    }
+  }
+
   // --- Populate Colors and Stamps UI ---
   function populateToolbar() {
     // Colors
     const paletteContainer = document.getElementById('colors-palette');
     paletteContainer.innerHTML = '';
-    BRUSH_COLORS.forEach((color, idx) => {
+    BRUSH_COLORS.forEach((color) => {
       const dot = document.createElement('div');
-      dot.className = 'color-dot' + (idx === 0 ? ' active' : '');
+      dot.className = 'color-dot';
       dot.style.backgroundColor = color;
       dot.dataset.color = color;
       
       dot.addEventListener('click', (e) => {
         e.stopPropagation();
-        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-        dot.classList.add('active');
-        state.brushColor = color;
+        
+        // If clicking the ALREADY ACTIVE color dot -> UN-CLICK / DESELECT IT to return to Type Mode!
+        if (state.activeMode === 'draw' && state.brushColor === color) {
+          setMode('type');
+        } else {
+          state.brushColor = color;
+          setMode('draw');
+        }
       });
       
       paletteContainer.appendChild(dot);
@@ -242,6 +281,7 @@
 
     // Touch events mapping
     canvas.addEventListener('touchstart', (e) => {
+      if (state.activeMode !== 'draw') return;
       const t = e.touches[0];
       const m = new MouseEvent('mousedown', { clientX: t.clientX, clientY: t.clientY });
       canvas.dispatchEvent(m);
@@ -249,6 +289,7 @@
     }, { passive: false });
 
     canvas.addEventListener('touchmove', (e) => {
+      if (state.activeMode !== 'draw') return;
       const t = e.touches[0];
       const m = new MouseEvent('mousemove', { clientX: t.clientX, clientY: t.clientY });
       canvas.dispatchEvent(m);
@@ -256,6 +297,7 @@
     }, { passive: false });
 
     canvas.addEventListener('touchend', () => {
+      if (state.activeMode !== 'draw') return;
       canvas.dispatchEvent(new MouseEvent('mouseup', {}));
     });
   }
@@ -268,9 +310,8 @@
   }
 
   function startPaint(e) {
-    if (state.isRecipientView) return;
+    if (state.isRecipientView || state.activeMode !== 'draw') return;
     state.isDrawing = true;
-    state.isClickCandidate = true;
     
     const rect = canvas.getBoundingClientRect();
     const x = Math.round((e.clientX - rect.left) / rect.width * 1000);
@@ -295,7 +336,7 @@
   }
 
   function paint(e) {
-    if (!state.isDrawing || state.isRecipientView) return;
+    if (!state.isDrawing || state.isRecipientView || state.activeMode !== 'draw') return;
     
     const rect = canvas.getBoundingClientRect();
     const x = Math.round((e.clientX - rect.left) / rect.width * 1000);
@@ -303,10 +344,6 @@
     
     const current = state.strokes[state.strokes.length - 1];
     const last = current.points[current.points.length - 1];
-    
-    if (Math.hypot(x - last[0], y - last[1]) > 4) {
-      state.isClickCandidate = false;
-    }
     
     if (Math.hypot(x - last[0], y - last[1]) < 3) return;
     
@@ -319,13 +356,6 @@
       state.isDrawing = false;
       simplifyLastStroke();
       redrawStrokes();
-      
-      // If user tapped without dragging, focus the textarea to type!
-      if (state.isClickCandidate && !state.isRecipientView) {
-        state.strokes.pop();
-        redrawStrokes();
-        letterTextarea.focus();
-      }
     }
   }
 
@@ -470,7 +500,7 @@
       function endDrag() {
         el.classList.remove('dragging');
         window.removeEventListener('mousemove', onDrag);
-        window.removeEventListener('mouseup', endDrag);
+        window.removeEventListener('mouseup', onDrag);
         window.removeEventListener('touchmove', onDrag);
         window.removeEventListener('touchend', endDrag);
       }

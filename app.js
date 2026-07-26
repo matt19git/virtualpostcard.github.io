@@ -1,4 +1,4 @@
-// app.js - Streamlined & Unified Postcard Logic for Ashlyn & Matt
+// app.js - Streamlined & Unified Postcard Logic
 
 (function() {
   
@@ -141,10 +141,10 @@
     const inputFrom = document.getElementById('input-from');
     
     inputTo.addEventListener('input', () => {
-      document.getElementById('display-to').textContent = `To: ${inputTo.value.trim() || 'Ashlyn'}`;
+      document.getElementById('display-to').textContent = `To: ${inputTo.value.trim() || 'Name Here'}`;
     });
     inputFrom.addEventListener('input', () => {
-      document.getElementById('display-from').textContent = `From: ${inputFrom.value.trim() || 'Matt'}`;
+      document.getElementById('display-from').textContent = `From: ${inputFrom.value.trim() || 'Name Here'}`;
     });
 
     // Window resize to fit canvas
@@ -322,7 +322,6 @@
       
       // If user tapped without dragging, focus the textarea to type!
       if (state.isClickCandidate && !state.isRecipientView) {
-        // remove single point stroke
         state.strokes.pop();
         redrawStrokes();
         letterTextarea.focus();
@@ -560,9 +559,8 @@
     envelopeContainer.className = 'envelope-container in-review';
     envelopeContainer.style.display = 'block';
     
-    // Front address defaults: Ashlyn & Matt
-    const toName = document.getElementById('input-to').value.trim() || 'Ashlyn';
-    const fromName = document.getElementById('input-from').value.trim() || 'Matt';
+    const toName = document.getElementById('input-to').value.trim() || 'Name Here';
+    const fromName = document.getElementById('input-from').value.trim() || 'Name Here';
     document.getElementById('display-to').textContent = `To: ${toName}`;
     document.getElementById('display-from').textContent = `From: ${fromName}`;
     
@@ -655,8 +653,8 @@
   function generateMagicLink() {
     const letterObj = {
       t: letterTextarea.value,
-      to: document.getElementById('input-to').value.trim() || 'Ashlyn',
-      fr: document.getElementById('input-from').value.trim() || 'Matt',
+      to: document.getElementById('input-to').value.trim() || 'Name Here',
+      fr: document.getElementById('input-from').value.trim() || 'Name Here',
       es: state.selectedEnvStamp, // envelope postage stamp ID
       st: state.stamps.map(s => ({
         id: s.id,
@@ -723,8 +721,8 @@
     letterTextarea.value = data.t || '';
     letterTextarea.readOnly = true;
 
-    const to = data.to || 'Ashlyn';
-    const from = data.fr || 'Matt';
+    const to = data.to || 'Name Here';
+    const from = data.fr || 'Name Here';
     document.getElementById('input-to').value = to;
     document.getElementById('input-from').value = from;
 
@@ -848,7 +846,7 @@
 
   function emailShareLink() {
     const link = document.getElementById('share-link-input').value;
-    const to = document.getElementById('input-to').value.trim() || 'Ashlyn';
+    const to = document.getElementById('input-to').value.trim() || 'Name Here';
     const subject = encodeURIComponent("A virtual letter for you! 💌");
     const body = encodeURIComponent(`Hi ${to},\n\nI wrote and drew a virtual letter for you. Open it here:\n\n${link}\n\nWith love.`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;

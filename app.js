@@ -1,4 +1,4 @@
-// app.js - Streamlined & Unified Postcard Logic with Real Vintage Stamps
+// app.js - Cute Stickers on Card & Real Vintage Postage Stamps on Envelope
 
 (function() {
   
@@ -17,8 +17,15 @@
     isOpening: false             // lock flag during open animation
   };
 
-  // Real Vintage Postage Stamps List
-  const STAMPS_LIST = [
+  // Cute Stickers for the Letter Card
+  const STICKERS_LIST = [
+    { id: 'sticker-heart', label: 'Cute Heart Sticker', src: 'assets/stickers/sticker_heart.png' },
+    { id: 'sticker-sparkles', label: 'Gold Sparkles Sticker', src: 'assets/stickers/sticker_sparkles.png' },
+    { id: 'sticker-daisy', label: 'Pink Daisy Flower Sticker', src: 'assets/stickers/sticker_daisy.png' }
+  ];
+
+  // Real Vintage Postage Stamps for Envelope
+  const ENV_STAMPS_LIST = [
     { id: 'stamp-heart', label: 'Victorian Heart Stamp', src: 'assets/stamps/stamp_heart.png' },
     { id: 'stamp-bird', label: 'Air Mail Pigeon Stamp', src: 'assets/stamps/stamp_bird.png' },
     { id: 'stamp-rose', label: 'Botanical Rose Stamp', src: 'assets/stamps/stamp_rose.png' }
@@ -182,7 +189,7 @@
     }
   }
 
-  // --- Populate Colors and Real Stamps UI ---
+  // --- Populate Colors and Cute Stickers UI ---
   function populateToolbar() {
     // Colors
     const paletteContainer = document.getElementById('colors-palette');
@@ -206,19 +213,19 @@
       paletteContainer.appendChild(dot);
     });
 
-    // Real Stamps Tray
+    // Cute Stickers Tray for Card
     stampsTray.innerHTML = '';
-    STAMPS_LIST.forEach(stamp => {
+    STICKERS_LIST.forEach(sticker => {
       const stampThumb = document.createElement('div');
       stampThumb.className = 'stamp-thumb';
-      stampThumb.dataset.id = stamp.id;
-      stampThumb.title = stamp.label;
-      stampThumb.innerHTML = `<img src="${stamp.src}" alt="${stamp.label}">`;
+      stampThumb.dataset.id = sticker.id;
+      stampThumb.title = sticker.label;
+      stampThumb.innerHTML = `<img src="${sticker.src}" alt="${sticker.label}">`;
       
       stampThumb.addEventListener('click', (e) => {
         e.stopPropagation();
         if (!state.isRecipientView) {
-          placeStampOnCard(stamp.id);
+          placeStampOnCard(sticker.id);
         }
       });
       stampsTray.appendChild(stampThumb);
@@ -230,7 +237,7 @@
     if (!envStampPicker) return;
     envStampPicker.innerHTML = '';
     
-    STAMPS_LIST.forEach(stamp => {
+    ENV_STAMPS_LIST.forEach(stamp => {
       const opt = document.createElement('div');
       opt.className = 'env-stamp-opt' + (stamp.id === state.selectedEnvStamp ? ' active' : '');
       opt.dataset.id = stamp.id;
@@ -252,7 +259,7 @@
   }
 
   function updateEnvelopeStampDisplay(stampId) {
-    const stampData = STAMPS_LIST.find(s => s.id === stampId) || STAMPS_LIST[0];
+    const stampData = ENV_STAMPS_LIST.find(s => s.id === stampId) || ENV_STAMPS_LIST[0];
     if (envelopeStampSpot) {
       envelopeStampSpot.innerHTML = `<img src="${stampData.src}" alt="${stampData.label}">`;
     }
@@ -402,15 +409,15 @@
     }
   }
 
-  // --- Real Vintage Stamp Manager (Draggable on Card) ---
-  function placeStampOnCard(stampId) {
-    const stampData = STAMPS_LIST.find(s => s.id === stampId) || STAMPS_LIST[0];
+  // --- Cute Sticker Manager (Draggable on Card) ---
+  function placeStampOnCard(stickerId) {
+    const stickerData = STICKERS_LIST.find(s => s.id === stickerId) || STICKERS_LIST[0];
     
     const stampEl = document.createElement('div');
     stampEl.className = 'placed-stamp';
-    stampEl.dataset.id = stampId;
+    stampEl.dataset.id = stickerId;
     stampEl.innerHTML = `
-      <img src="${stampData.src}" alt="${stampData.label}">
+      <img src="${stickerData.src}" alt="${stickerData.label}">
       <div class="stamp-btn stamp-del-btn"><i class="fas fa-times"></i></div>
       <div class="stamp-btn stamp-rot-btn"><i class="fas fa-sync-alt"></i></div>
     `;
@@ -419,7 +426,7 @@
     const y = 30 + Math.random() * 10;
 
     const stampObj = {
-      id: stampId,
+      id: stickerId,
       x: x,
       y: y,
       scale: 1.0,
@@ -741,15 +748,15 @@
     document.getElementById('input-to').value = to;
     document.getElementById('input-from').value = from;
 
-    // Load card stamps
+    // Load card stickers
     stampsOverlay.innerHTML = '';
     state.stamps = [];
     if (data.st) {
       data.st.forEach(sData => {
-        const stampData = STAMPS_LIST.find(s => s.id === sData.id) || STAMPS_LIST[0];
+        const stickerData = STICKERS_LIST.find(s => s.id === sData.id) || STICKERS_LIST[0];
         const stampEl = document.createElement('div');
         stampEl.className = 'placed-stamp';
-        stampEl.innerHTML = `<img src="${stampData.src}" alt="${stampData.label}">`;
+        stampEl.innerHTML = `<img src="${stickerData.src}" alt="${stickerData.label}">`;
         stampEl.style.left = `${sData.x}%`;
         stampEl.style.top = `${sData.y}%`;
         stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
@@ -941,10 +948,10 @@
       eCtx.stroke();
     });
 
-    // 4. Render Draggable Real Stamps
+    // 4. Render Draggable Cute Stickers
     const stampPromises = state.stamps.map(stamp => {
       return new Promise((resolve) => {
-        const stampData = STAMPS_LIST.find(s => s.id === stamp.id) || STAMPS_LIST[0];
+        const stickerData = STICKERS_LIST.find(s => s.id === stamp.id) || STICKERS_LIST[0];
         const img = new Image();
         img.onload = () => {
           eCtx.save();
@@ -953,13 +960,13 @@
           eCtx.translate(stampX, stampY);
           eCtx.rotate((stamp.rotation * Math.PI) / 180);
           
-          const drawSize = 150 * stamp.scale;
+          const drawSize = 140 * stamp.scale;
           eCtx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
           eCtx.restore();
           resolve();
         };
         img.onerror = resolve;
-        img.src = stampData.src;
+        img.src = stickerData.src;
       });
     });
 

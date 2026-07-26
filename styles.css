@@ -759,16 +759,25 @@ body {
   overflow: hidden;
 }
 
+.envelope-side * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* Front Side: Clean Envelope Face with Address & Top-Right Stamp */
 .envelope-front-side {
   z-index: 2;
   transform: rotateY(0deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Back Side: Envelope Vector SVG Flaps & Center Wax Seal */
 .envelope-back-side {
   z-index: 1;
   transform: rotateY(180deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .envelope-flaps-svg {
@@ -795,7 +804,8 @@ body {
   position: absolute;
   top: 50%;
   left: 42px;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateZ(0);
+  -webkit-transform: translateY(-50%) translateZ(0);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -809,6 +819,8 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,0.2);
   z-index: 4;
   pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Front Side: Real Postage Stamp in Top Right */
@@ -824,6 +836,8 @@ body {
   z-index: 5;
   background: transparent;
   overflow: visible;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .envelope-stamp-spot img {
@@ -832,6 +846,8 @@ body {
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   transform: rotate(3deg);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Back Side: Wax Seal at the center top flap tip */
@@ -855,6 +871,8 @@ body {
   transition: transform 0.4s var(--bounce-easing), opacity 0.3s ease;
   background: radial-gradient(circle at 35% 35%, #b7094c 0%, #800f2f 80%);
   pointer-events: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .wax-seal:hover {

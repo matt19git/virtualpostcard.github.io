@@ -114,7 +114,7 @@ body {
   padding: 60px 48px;
   box-shadow: var(--shadow-lg);
   text-align: center;
-  width: min(600px, 94vw);
+  width: min(600px, 92vw);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.4);
   margin: 0 auto;
@@ -136,11 +136,11 @@ body {
   font-style: italic;
 }
 
-/* --- Responsive Container for Fixed 600px x 690px Card Resolution --- */
+/* --- Responsive Container for Fixed 600px x 690px Card Resolution with Cozy Margin --- */
 .postcard-card-container {
   position: relative;
-  width: min(600px, 94vw);
-  height: calc(min(600px, 94vw) * 1.15);
+  width: min(600px, calc(100vw - 32px));
+  height: calc(min(600px, calc(100vw - 32px)) * 1.15);
   max-height: 690px;
   display: flex;
   justify-content: center;
@@ -170,7 +170,7 @@ body {
   transform-origin: center center;
 }
 
-/* Container automatic scale adjustment on mobile viewports */
+/* Container automatic scale adjustment on mobile viewports with side breathing room */
 @media (max-width: 640px) {
   .postcard-card {
     transform: scale(calc((100vw - 32px) / 600));
@@ -193,6 +193,8 @@ body {
 .postcard-card.recipient-mode {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  margin: 12px auto;
+  box-shadow: var(--shadow-lg);
 }
 
 .postcard-card.recipient-mode .postcard-scroll-body {
@@ -373,7 +375,7 @@ body {
 /* --- Core Toolbar Below the Card --- */
 .postcard-toolbar {
   position: relative;
-  width: min(600px, 94vw);
+  width: min(600px, calc(100vw - 32px));
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -679,7 +681,7 @@ body {
   border-radius: var(--border-radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-lg);
-  width: min(600px, 94vw);
+  width: min(600px, calc(100vw - 32px));
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -769,8 +771,8 @@ body {
 /* --- VECTOR SVG ENVELOPE: 100% CRISP ON IPHONE & MOBILE --- */
 .envelope-container {
   position: relative;
-  width: min(600px, 94vw);
-  height: calc(min(600px, 94vw) * 0.7);
+  width: min(600px, calc(100vw - 32px));
+  height: calc(min(600px, calc(100vw - 32px)) * 0.7);
   max-height: 420px;
   z-index: 12;
   display: none;

@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Fixed 600x690 Card Resolution for 100% Cross-Device Pixel Consistency
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Responsive Padding for Mobile Letter Opening
 
 (function() {
   
@@ -689,7 +689,7 @@
     reviewDesk.appendChild(envelopeContainer);
     
     const screenWidth = window.innerWidth;
-    const baseScale = screenWidth < 540 ? Math.min(0.72, (screenWidth - 30) / 500) : 1;
+    const baseScale = screenWidth < 640 ? Math.min(0.92, (screenWidth - 32) / 600) : 1;
     
     postcardCard.className = 'postcard-card';
     envelopeContainer.className = 'envelope-container';
@@ -892,7 +892,7 @@
     waxSealEl.style.display = 'flex';
 
     const screenWidth = window.innerWidth;
-    const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;
+    const baseScale = screenWidth < 640 ? Math.min(0.92, (screenWidth - 32) / 600) : 1;
 
     // Viewport Centering for Mobile Recipient View
     envelopeContainer.removeAttribute('style');
@@ -926,7 +926,7 @@
     }
 
     const screenWidth = window.innerWidth;
-    const baseScale = screenWidth < 540 ? Math.min(0.76, (screenWidth - 30) / 500) : 1;
+    const baseScale = screenWidth < 640 ? Math.min(0.92, (screenWidth - 32) / 600) : 1;
 
     // 1. Smooth 3D Flip Envelope from Front to Back
     envelopeEl.classList.add('show-back');

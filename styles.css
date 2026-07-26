@@ -1,0 +1,959 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Sacramento&display=swap');
+
+/* --- Design System & CSS Variables --- */
+:root {
+  --color-desk: #2c1a13;
+  --color-desk-light: #3d271d;
+  --color-paper-cream: #faf6ee;
+  --color-paper-shadow: rgba(0, 0, 0, 0.18);
+  
+  /* Unified Romantic Colors */
+  --color-rose: #e27396;
+  --color-rose-dark: #800f2f;
+  --color-rose-light: #f7cad0;
+  --color-sage: #83c5be;
+  --color-sage-dark: #2d6a4f;
+  --color-sky: #a8dadc;
+  --color-charcoal: #2b2d42;
+  --color-white: #ffffff;
+  
+  /* Envelope and Seal Defaults */
+  --env-bg: #e27396;
+  --env-bg-dark: #b84b6c;
+  --env-text: #fff0f5;
+  --seal-color: #800f2f;
+  
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.25);
+  
+  --spring-easing: linear(0, 0.016 0.5%, 0.06 1%, 0.226 2%, 1.116 5.4%, 1.375 6.6%, 1.527 7.7%, 1.565 8.2%, 1.585 8.8%, 1.581 9.3%, 1.559 9.8%, 1.458 10.9%, 0.937 14.3%, 0.784 15.5%, 0.693 16.6%, 0.67 17.1%, 0.657 17.7%, 0.671 18.7%, 0.729 19.8%, 1.042 23.3%, 1.13 24.5%, 1.182 25.6%, 1.201 26.7%, 1.192 27.7%, 1.156 28.8%, 0.977 32.2%, 0.925 33.4%, 0.894 34.5%, 0.882 35.6%, 0.887 36.6%, 0.907 37.7%, 1.045 42.4%, 1.069 44.5%, 1.059 46.3%, 0.979 50.9%, 0.96 53.4%, 0.966 55.3%, 1.013 59.9%, 1.024 62.3%, 0.986 71.2%, 1.008 79.9%, 0.995 88.9%, 1);
+  --bounce-easing: linear(0, 0.214 14.7%, 0.386 23.7%, 0.598 31.9%, 0.999 44.7%, 0.807 52.6%, 0.762 56%, 0.747 59.4%, 0.758 62.4%, 0.793 65.6%, 0.999 77.4%, 0.961 81.2%, 0.949 84.8%, 0.956 88%, 0.993 95.5%, 1);
+}
+
+/* --- Base Styles --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--color-desk);
+  color: var(--color-charcoal);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1500px;
+}
+
+/* --- Desk Backdrop --- */
+.desk-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, var(--color-desk-light) 0%, var(--color-desk) 100%);
+  z-index: 1;
+}
+
+.desk-surface::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, #000 4px, #000 8px);
+}
+
+/* --- Core View Wrapper --- */
+.main-view-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  padding: 10px;
+}
+
+/* --- Views Toggle --- */
+.view-panel {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.view-panel.active {
+  display: flex;
+}
+
+/* --- Home / Landing View --- */
+.home-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--border-radius-lg);
+  padding: 40px 30px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  color: var(--color-rose-dark);
+  font-weight: 700;
+}
+
+.home-title span {
+  font-family: 'Sacramento', cursive;
+  font-size: 3.5rem;
+  color: var(--color-rose);
+  display: block;
+  margin-top: -15px;
+}
+
+.home-desc {
+  font-size: 1rem;
+  color: #555;
+  margin: 25px 0 35px 0;
+  line-height: 1.6;
+}
+
+/* --- The Physical Postcard Paper Card --- */
+.postcard-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 560px;
+  background-color: var(--color-paper-cream);
+  border-radius: 6px;
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.1),
+    0 10px 35px var(--color-paper-shadow),
+    inset 0 0 30px rgba(226, 214, 199, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.8s var(--spring-easing), opacity 0.5s ease;
+  z-index: 10;
+  transform-style: preserve-3d;
+}
+
+/* Paper grain weathering overlay */
+.postcard-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: radial-gradient(#000 25%, transparent 26%);
+  background-size: 4px 4px;
+  z-index: 9;
+}
+
+/* Split Panes Design (Top Drawing / Bottom Writing) */
+.postcard-split-top {
+  position: relative;
+  height: 42%;
+  border-bottom: 2px dashed rgba(226, 149, 120, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.postcard-split-bottom {
+  position: relative;
+  height: 58%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 25px 25px 25px;
+}
+
+/* Drawing Area Canvas */
+.drawing-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  z-index: 2;
+}
+
+.canvas-hint {
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  font-size: 0.72rem;
+  color: #b0a090;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Cursive letter typography */
+.postcard-textarea {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'Caveat', cursive;
+  font-size: 1.6rem;
+  line-height: 1.55;
+  color: var(--color-charcoal);
+  z-index: 3;
+}
+
+/* --- Placing & Dragging Stamps overlay --- */
+.stamps-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.placed-stamp {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  pointer-events: auto;
+  cursor: grab;
+  transform-origin: center center;
+  user-select: none;
+  touch-action: none;
+}
+
+.placed-stamp:hover {
+  outline: 2px dashed var(--color-rose);
+  outline-offset: 4px;
+}
+
+.placed-stamp.dragging {
+  cursor: grabbing;
+  opacity: 0.95;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+}
+
+.placed-stamp svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Controls for deletion and resize */
+.placed-stamp.selected::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 2px solid var(--color-rose);
+  border-radius: var(--border-radius-sm);
+  pointer-events: none;
+}
+
+.stamp-btn {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid white;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  color: white;
+}
+
+.stamp-del-btn {
+  top: -11px;
+  right: -11px;
+  background-color: #ff4d4f;
+}
+
+.stamp-rot-btn {
+  bottom: -11px;
+  right: -11px;
+  background-color: var(--color-sage-dark);
+  cursor: nwse-resize;
+}
+
+.placed-stamp.selected .stamp-btn {
+  display: flex;
+}
+
+/* --- Core Toolbar Below the Card (Z-INDEX HIGH TO ALLOW CLICKS) --- */
+.postcard-toolbar {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+  z-index: 30;
+  pointer-events: auto;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px 15px;
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  gap: 15px;
+  pointer-events: auto;
+}
+
+.colors-palette {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.color-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s var(--bounce-easing);
+  pointer-events: auto;
+}
+
+.color-dot:hover {
+  transform: scale(1.2);
+}
+
+.color-dot.active {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 3px var(--color-rose-light);
+}
+
+.stamps-picker {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.stamp-thumb {
+  width: 38px;
+  height: 38px;
+  padding: 3px;
+  border-radius: var(--border-radius-sm);
+  background: white;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease;
+  pointer-events: auto;
+}
+
+.stamp-thumb:hover {
+  transform: scale(1.15);
+  background: var(--color-rose-light);
+}
+
+.stamp-thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Sealing Button */
+.btn {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s var(--spring-easing), box-shadow 0.4s var(--spring-easing), background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-rose-dark);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #9c1b3d;
+  transform: scale(1.04);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  border-radius: var(--border-radius-sm);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: white;
+  box-shadow: none;
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: white;
+}
+
+/* --- Review Desk Previews Layout --- */
+.review-desk-panel {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.review-desk-panel.active {
+  display: flex;
+}
+
+.previews-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  perspective: 1200px;
+}
+
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.card-review-spot, .envelope-review-spot {
+  width: 250px;
+  height: 310px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius-md);
+  border: 1px dashed rgba(255,255,255,0.15);
+}
+
+.envelope-review-spot {
+  height: 185px;
+}
+
+.postcard-card.in-review {
+  position: absolute;
+  transform: scale(0.5) rotate(-3deg);
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  z-index: 15;
+}
+
+.envelope-container.in-review {
+  position: absolute;
+  display: block;
+  transform: scale(0.48) rotate(3deg);
+  pointer-events: auto;
+  z-index: 15;
+}
+
+/* Review Inputs Panel */
+.review-form {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.review-form h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--color-rose-dark);
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e1d6c7;
+  border-radius: var(--border-radius-sm);
+  outline: none;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--color-rose);
+}
+
+/* --- Single Envelope View (3D Animation) --- */
+.envelope-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 500 / 370;
+  perspective: 1500px;
+  z-index: 12;
+  display: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.8s var(--spring-easing), opacity 0.5s ease;
+}
+
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--spring-easing);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.envelope.flipped {
+  transform: rotateY(180deg);
+}
+
+.envelope-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  pointer-events: auto;
+}
+
+/* Front Face: Addresses */
+.envelope-front {
+  background-color: var(--env-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--env-text);
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.address-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 75%;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  padding-left: 15px;
+}
+
+.envelope-stamp-spot {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  width: 65px;
+  height: 75px;
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.envelope-stamp-spot svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Back Face: Sealing flaps */
+.envelope-back {
+  background-color: var(--env-bg-dark);
+  transform: rotateY(180deg);
+  overflow: visible;
+}
+
+.envelope-flaps {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.flap {
+  position: absolute;
+  background-color: var(--env-bg);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12));
+}
+
+.flap.left {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 185px solid transparent;
+  border-bottom: 185px solid transparent;
+  border-left: 250px solid var(--env-bg);
+  z-index: 2;
+}
+
+.flap.right {
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 185px solid transparent;
+  border-bottom: 185px solid transparent;
+  border-right: 250px solid var(--env-bg);
+  z-index: 2;
+}
+
+.flap.bottom {
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 250px solid transparent;
+  border-right: 250px solid transparent;
+  border-bottom: 200px solid var(--env-bg-dark);
+  z-index: 1;
+}
+
+/* Top flap */
+.flap.top {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 250px solid transparent;
+  border-right: 250px solid transparent;
+  border-top: 200px solid var(--env-bg);
+  transform-origin: top center;
+  transition: transform 0.6s ease;
+  z-index: 3;
+}
+
+.envelope.open .flap.top {
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+/* --- Wax Seal --- */
+.wax-seal {
+  position: absolute;
+  top: 160px;
+  left: 215px;
+  width: 70px;
+  height: 70px;
+  border-radius: 49% 51% 52% 48% / 51% 52% 48% 49%;
+  cursor: pointer;
+  z-index: 4;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    inset -4px -4px 8px rgba(0,0,0,0.3),
+    inset 4px 4px 8px rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s var(--bounce-easing), opacity 0.3s ease;
+  background: radial-gradient(circle at 35% 35%, #b7094c 0%, #800f2f 80%);
+  pointer-events: auto;
+}
+
+.wax-seal:hover {
+  transform: scale(1.08);
+}
+
+.wax-seal svg {
+  width: 60%;
+  height: 60%;
+  fill: rgba(0, 0, 0, 0.35);
+  filter: drop-shadow(1px 1px 0px rgba(255, 255, 255, 0.15));
+}
+
+.wax-seal.broken {
+  animation: sealBreak 0.6s ease forwards;
+  pointer-events: none;
+}
+
+/* Help text for recipient */
+.recipient-help-text {
+  color: white;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  text-align: center;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+
+/* --- Share Modal Dialog --- */
+dialog.share-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: var(--border-radius-lg);
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(15px);
+  max-width: 480px;
+  width: 90%;
+  color: var(--color-charcoal);
+  z-index: 100;
+  outline: none;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.modal-content h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--color-rose-dark);
+}
+
+.share-link-box {
+  display: flex;
+  border: 1px solid #e1d6c7;
+  border-radius: var(--border-radius-sm);
+  background: white;
+  width: 100%;
+  overflow: hidden;
+}
+
+.share-link-input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  color: #666;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.btn-copy {
+  padding: 12px 16px;
+  border-radius: 0;
+  background: var(--color-sage);
+  color: var(--color-charcoal);
+  border-left: 1px solid #e1d6c7;
+}
+
+.btn-copy:hover {
+  background: #6fb2aa;
+}
+
+/* --- Floating Toast --- */
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(43, 45, 66, 0.95);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  box-shadow: var(--shadow-md);
+  font-weight: 600;
+  z-index: 1000;
+  transition: transform 0.4s var(--spring-easing);
+  pointer-events: none;
+}
+.toast-container.active {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --- Keyframe Animations --- */
+@keyframes sealBreak {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15) rotate(5deg); opacity: 0.9; }
+  100% { transform: scale(0.9) rotate(-10deg) translateY(30px); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- Responsive Adaptations --- */
+@media (max-width: 600px) {
+  .previews-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .card-review-spot {
+    width: 180px;
+    height: 220px;
+  }
+  
+  .envelope-review-spot {
+    width: 220px;
+    height: 160px;
+  }
+  
+  .postcard-card.in-review {
+    transform: scale(0.38) rotate(-3deg);
+  }
+
+  .envelope-container.in-review {
+    transform: scale(0.42) rotate(3deg);
+  }
+  
+  .postcard-card {
+    height: 480px;
+  }
+  
+  .postcard-split-top {
+    height: 38%;
+  }
+  
+  .postcard-split-bottom {
+    height: 62%;
+    padding: 15px;
+  }
+  
+  .postcard-textarea {
+    font-size: 1.45rem;
+  }
+  
+  .envelope-container {
+    width: 95%;
+  }
+
+  .flap.left { border-width: 140px 0 140px 185px; }
+  .flap.right { border-width: 140px 185px 140px 0; }
+  .flap.bottom { border-width: 0 185px 150px 185px; }
+  .flap.top { border-width: 150px 185px 0 185px; }
+  .wax-seal { top: 125px; left: 150px; }
+  
+  .toolbar-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 8px;
+  }
+  
+  .colors-palette, .stamps-picker {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -136,12 +136,24 @@ body {
   font-style: italic;
 }
 
-/* --- The Physical Postcard Paper Card (Full Sheet Draw & Type) --- */
-.postcard-card {
+/* --- Responsive Container for Fixed 600px x 690px Card Resolution --- */
+.postcard-card-container {
   position: relative;
   width: min(600px, 94vw);
   height: calc(min(600px, 94vw) * 1.15);
   max-height: 690px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* --- The Physical Postcard Paper Card (FIXED 600px x 690px Layout for 100% Identical Text Wrapping) --- */
+.postcard-card {
+  position: relative;
+  width: 600px;
+  height: 690px;
   background-color: var(--color-paper-cream);
   border-radius: 8px;
   box-shadow: 
@@ -154,6 +166,15 @@ body {
   transition: transform 0.8s var(--spring-easing), opacity 0.5s ease;
   z-index: 10;
   margin: 0 auto;
+  flex-shrink: 0;
+  transform-origin: center top;
+}
+
+/* Container automatic scale adjustment on mobile viewports */
+@media (max-width: 640px) {
+  .postcard-card {
+    transform: scale(calc((100vw - 32px) / 600));
+  }
 }
 
 /* Inner Unified Scroll Body */
@@ -201,33 +222,33 @@ body {
   z-index: 9;
 }
 
-/* Full Sheet Textarea Underneath Canvas */
+/* Full Sheet Textarea Underneath Canvas (Fixed 600px Card Bounds) */
 .postcard-textarea {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 600px;
+  height: 690px;
   padding: 38px;
   background: transparent;
   border: none;
   outline: none;
   resize: none;
   font-family: 'Caveat', cursive;
-  font-size: 2.15rem;
+  font-size: 34px; /* Fixed px font size so text wraps 100% identically on computer and mobile! */
   line-height: 1.5;
   color: var(--color-charcoal);
   z-index: 1;
 }
 
-/* Static Text Display for Recipient View (Expands height naturally) */
+/* Static Text Display for Recipient View (Fixed 600px Card Bounds) */
 .postcard-text-display {
   position: relative;
-  width: 100%;
-  min-height: 100%;
+  width: 600px;
+  min-height: 690px;
   padding: 38px;
   font-family: 'Caveat', cursive;
-  font-size: 2.15rem;
+  font-size: 34px; /* Fixed px font size so text wraps 100% identically on computer and mobile! */
   line-height: 1.5;
   color: var(--color-charcoal);
   white-space: pre-wrap;
@@ -236,13 +257,13 @@ body {
   display: none;
 }
 
-/* Full Sheet Canvas over Textarea */
+/* Full Sheet Canvas over Textarea (Fixed 600px x 690px Resolution) */
 .drawing-canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 600px;
+  height: 690px;
   cursor: crosshair;
   z-index: 2;
   pointer-events: none; /* Default off when in Type mode */
@@ -257,8 +278,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 600px;
+  height: 690px;
   z-index: 5;
   pointer-events: none;
 }
@@ -631,7 +652,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.42);
+  transform: translate(-50%, -50%) scale(0.416666);
   box-shadow: var(--shadow-lg);
   pointer-events: none;
   z-index: 15;
@@ -642,7 +663,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.42);
+  transform: translate(-50%, -50%) scale(0.416666);
   pointer-events: auto;
   z-index: 15;
   margin: 0;

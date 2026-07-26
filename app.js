@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Recipient Help Banner Shown ONLY for Recipients
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with Fixed 600x690 Card Resolution for 100% Cross-Device Pixel Consistency
 
 (function() {
   
@@ -43,7 +43,7 @@
 
   // --- DOM Elements ---
   let canvas, ctx;
-  let postcardCard, letterTextarea, letterTextDisplay;
+  let postcardCard, postcardCardContainer, letterTextarea, letterTextDisplay;
   let stampsOverlay, stampsTray, envStampPicker;
   let btnModeType, btnModeDraw;
   let btnUndo, btnRedo, btnClear;
@@ -69,6 +69,7 @@
     canvas = document.getElementById('drawing-canvas');
     ctx = canvas.getContext('2d');
     postcardCard = document.getElementById('postcard-card');
+    postcardCardContainer = document.getElementById('postcard-card-container');
     letterTextarea = document.getElementById('letter-textarea');
     letterTextDisplay = document.getElementById('letter-text-display');
     stampsOverlay = document.getElementById('stamps-overlay');
@@ -321,9 +322,8 @@
   }
 
   function resizeCanvas() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    canvas.width = 600;
+    canvas.height = 690;
     redrawStrokes();
   }
 
@@ -349,8 +349,8 @@
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
-    const cx = (x / 1000) * canvas.width;
-    const cy = (y / 1000) * canvas.height;
+    const cx = (x / 1000) * 600;
+    const cy = (y / 1000) * 690;
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx, cy);
     ctx.stroke();
@@ -403,7 +403,7 @@
   }
 
   function redrawStrokes() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, 600, 690);
     state.strokes.forEach(stroke => {
       if (stroke.points.length === 0) return;
       
@@ -414,20 +414,20 @@
       ctx.lineJoin = 'round';
       
       const first = stroke.points[0];
-      ctx.moveTo((first[0] / 1000) * canvas.width, (first[1] / 1000) * canvas.height);
+      ctx.moveTo((first[0] / 1000) * 600, (first[1] / 1000) * 690);
       
       if (stroke.points.length === 1) {
-        ctx.lineTo((first[0] / 1000) * canvas.width, (first[1] / 1000) * canvas.height);
+        ctx.lineTo((first[0] / 1000) * 600, (first[1] / 1000) * 690);
       } else {
         for (let i = 1; i < stroke.points.length - 1; i++) {
           const pt = stroke.points[i];
           const next = stroke.points[i + 1];
-          const xc = ((pt[0] + next[0]) / 2 / 1000) * canvas.width;
-          const yc = ((pt[1] + next[1]) / 2 / 1000) * canvas.height;
-          ctx.quadraticCurveTo((pt[0] / 1000) * canvas.width, (pt[1] / 1000) * canvas.height, xc, yc);
+          const xc = ((pt[0] + next[0]) / 2 / 1000) * 600;
+          const yc = ((pt[1] + next[1]) / 2 / 1000) * 690;
+          ctx.quadraticCurveTo((pt[0] / 1000) * 600, (pt[1] / 1000) * 690, xc, yc);
         }
         const last = stroke.points[stroke.points.length - 1];
-        ctx.lineTo((last[0] / 1000) * canvas.width, (last[1] / 1000) * canvas.height);
+        ctx.lineTo((last[0] / 1000) * 600, (last[1] / 1000) * 690);
       }
       ctx.stroke();
     });
@@ -662,7 +662,7 @@
     postcardCard.classList.remove('recipient-mode');
     envelopeContainer.removeAttribute('style');
 
-    document.getElementById('view-editor').insertBefore(postcardCard, document.querySelector('.postcard-toolbar'));
+    postcardCardContainer.appendChild(postcardCard);
     postcardCard.className = 'postcard-card';
     
     envelopeContainer.className = 'envelope-container';
@@ -1004,7 +1004,7 @@
   function downloadPostcardImage() {
     const exportCanvas = document.createElement('canvas');
     const width = 1200;
-    const height = 1400;
+    const height = 1380; // 2x HD resolution of 600x690 card
     exportCanvas.width = width;
     exportCanvas.height = height;
     const eCtx = exportCanvas.getContext('2d');
@@ -1021,12 +1021,12 @@
     // 2. Draw Text message across paper
     const text = letterTextarea.value;
     eCtx.fillStyle = '#2b2d42';
-    eCtx.font = "italic 44px 'Caveat', cursive";
+    eCtx.font = "italic 68px 'Caveat', cursive"; // Exact 2x of 34px font
     
     const lines = text.split('\n');
-    let yPos = 80;
-    const lineHeight = 60;
-    const maxWidth = width - 120;
+    let yPos = 120;
+    const lineHeight = 102; // 1.5 line height of 68px
+    const maxWidth = width - 152; // 2x of 76px padding
 
     lines.forEach(line => {
       const words = line.split(' ');
@@ -1034,14 +1034,14 @@
       words.forEach(word => {
         const test = curLine + word + ' ';
         if (eCtx.measureText(test).width > maxWidth) {
-          eCtx.fillText(curLine, 60, yPos);
+          eCtx.fillText(curLine, 76, yPos);
           curLine = word + ' ';
           yPos += lineHeight;
         } else {
           curLine = test;
         }
       });
-      eCtx.fillText(curLine, 60, yPos);
+      eCtx.fillText(curLine, 76, yPos);
       yPos += lineHeight;
     });
 
@@ -1050,7 +1050,7 @@
       if (stroke.points.length === 0) return;
       eCtx.beginPath();
       eCtx.strokeStyle = stroke.color;
-      eCtx.lineWidth = 6;
+      eCtx.lineWidth = 10;
       eCtx.lineCap = 'round';
       eCtx.lineJoin = 'round';
 
@@ -1100,7 +1100,7 @@
           eCtx.translate(stampX, stampY);
           eCtx.rotate((stamp.rotation * Math.PI) / 180);
           
-          const drawSize = 140 * stamp.scale;
+          const drawSize = 180 * stamp.scale;
           eCtx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
           eCtx.restore();
           URL.revokeObjectURL(url);

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtual Mail - Write a letter to someone</title>
   <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
-  <link rel="stylesheet" href="styles.css?v=250">
+  <link rel="stylesheet" href="styles.css?v=260">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -34,17 +34,20 @@
     <!-- VIEW 2: CARD EDITOR (FULL SHEET DRAW & TYPE ANYWHERE) -->
     <div id="view-editor" class="view-panel">
       
-      <!-- The Physical Letter Card -->
-      <div class="postcard-card" id="postcard-card">
-        <div class="postcard-texture"></div>
-        
-        <!-- Unified Inner Scroll Body holding Text, Canvas & Stickers together -->
-        <div class="postcard-scroll-body" id="postcard-scroll-body">
-          <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dear friend...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
-          <div id="letter-text-display" class="postcard-text-display"></div>
+      <!-- Responsive Scaled Container for 600x690 Postcard Card -->
+      <div class="postcard-card-container" id="postcard-card-container">
+        <!-- The Physical Letter Card with Fixed 600px x 690px Internal Layout -->
+        <div class="postcard-card" id="postcard-card">
+          <div class="postcard-texture"></div>
           
-          <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
-          <div class="stamps-overlay" id="stamps-overlay"></div>
+          <!-- Unified Inner Scroll Body holding Text, Canvas & Stickers together -->
+          <div class="postcard-scroll-body" id="postcard-scroll-body">
+            <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dear friend...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
+            <div id="letter-text-display" class="postcard-text-display"></div>
+            
+            <canvas id="drawing-canvas" class="drawing-canvas" width="600" height="690"></canvas>
+            <div class="stamps-overlay" id="stamps-overlay"></div>
+          </div>
         </div>
       </div>
 
@@ -291,6 +294,6 @@
 
   </div>
 
-  <script src="app.js?v=250"></script>
+  <script src="app.js?v=260"></script>
 </body>
 </html>

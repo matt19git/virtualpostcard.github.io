@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Love Mail - Write a letter to your love</title>
-  <meta name="description" content="Write a letter to your love. Beautiful, private, and serverless.">
-  <link rel="stylesheet" href="styles.css?v=60">
+  <title>Virtual Mail - Write a letter to someone</title>
+  <meta name="description" content="Write a letter to someone. Beautiful, private, and serverless virtual letters.">
+  <link rel="stylesheet" href="styles.css?v=70">
   
   <!-- FontAwesome for UI Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,10 +23,10 @@
     <!-- VIEW 1: HOME HUB -->
     <div id="view-home" class="view-panel active">
       <div class="home-card">
-        <h1 class="home-title">Love Mail</h1>
-        <p class="home-desc">Write a letter to your love.</p>
+        <h1 class="home-title">Virtual Mail</h1>
+        <p class="home-desc">Write a letter to someone.</p>
         <button id="btn-write-letter" class="btn btn-primary" style="padding: 14px 32px; font-size: 1.05rem;">
-          <i class="fas fa-feather-alt"></i> Create a Postcard
+          <i class="fas fa-feather-alt"></i> Create a Letter
         </button>
       </div>
     </div>
@@ -40,7 +40,7 @@
         
         <!-- Full-sheet Drawing Canvas over Textarea -->
         <canvas id="drawing-canvas" class="drawing-canvas"></canvas>
-        <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dearest...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
+        <textarea id="letter-textarea" class="postcard-textarea" placeholder="Dear friend...&#10;&#10;Write your letter here. Draw doodles anywhere on the paper!"></textarea>
 
         <!-- Absolute placed stamps overlay -->
         <div class="stamps-overlay" id="stamps-overlay"></div>
@@ -127,7 +127,7 @@
 
     <!-- VIEW 4: RECIPIENT ENVELOPE SCENE -->
     <div id="view-recipient" class="view-panel">
-      <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 💌</div>
+      <div class="recipient-help-text" id="recipient-help-text">You received a letter! Click the envelope to open. 📬</div>
       
       <!-- Envelope Container (Clean 2D Vector Envelope) -->
       <div class="envelope-container" id="envelope-container">
@@ -188,7 +188,7 @@
           <i class="far fa-envelope"></i> Open Email App
         </button>
         <button id="btn-download-postcard" class="btn btn-outline" style="color: var(--color-charcoal); border-color:#e1d6c7;">
-          <i class="fas fa-download"></i> Save as Postcard Image (PNG)
+          <i class="fas fa-download"></i> Save as Letter Image (PNG)
         </button>
       </div>
       
@@ -199,7 +199,7 @@
   </dialog>
 
   <!-- Toast Notification Overlay -->
-  <div id="toast-notification" class="toast-container">Copied link! 💌</div>
+  <div id="toast-notification" class="toast-container">Copied link! 📬</div>
 
   <!-- SVG Stamps Hidden assets library -->
   <div style="display: none;">
@@ -209,12 +209,12 @@
       <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#fff5f6" stroke="#e27396" stroke-width="2"/>
       <path d="M 50,75 C 20,55 25,30 50,45 C 75,30 80,55 50,75 Z" fill="#e27396" stroke="none" />
-      <text x="50" y="28" font-family="'Outfit', sans-serif" font-weight="800" font-size="10" fill="#800f2f" text-anchor="middle">LOVE</text>
+      <text x="50" y="28" font-family="'Outfit', sans-serif" font-weight="800" font-size="10" fill="#800f2f" text-anchor="middle">MAIL</text>
     </svg>
 
     <!-- STAMP 2: Pigeon -->
     <svg id="stamp-pigeon" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#eff7f6" stroke="#a8dadc" stroke-width="2"/>
       <path d="M 28,45 Q 45,30 58,40 Q 68,35 72,42 Q 62,55 52,50 Q 42,65 34,58 L 28,45 Z" fill="#fff" stroke="#1d3557" stroke-width="1.5"/>
       <path d="M 58,40 Q 52,20 48,32" stroke="#1d3557" stroke-width="1.5"/>
@@ -224,21 +224,21 @@
 
     <!-- STAMP 3: Flower -->
     <svg id="stamp-flower" viewBox="0 0 100 100" fill="none" stroke="#2b2d42" stroke-width="2">
-      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
+      <path d="M 5,5 Q 10,5 15,5 Q 20,5 25,5 Q 30,5 35,5 Q 40,5 45,5 Q 50,5 55,5 Q 60,5 65,5 Q 70,5 75,5 Q 80,5 85,5 Q 90,5 95,5 L 95,15 Q 95,20 95,25 Q 95,30 95,35 Q 95,40 95,45 Q 95,50 95,55 Q 95,60 95,65 Q 95,70 95,75 Q 95,80 95,85 Q 95,90 95,95 L 85,95 Q 80,95 75,95 Q 70,95 65,95 Q 60,95 55,95 Q 50,95 45,95 Q 40,95 35,95 Q 30,95 25,95 Q 20,95 15,95 Q 10,95 5,95 L 5,85 Q 5,80 5,75 Q 5,70 5,65 Q 5,60 5,55 Q 5,50 5,45 Q 5,40 5,35 Q 5,30 5,25 Q 5,20 5,15 Z" fill="#fff" />
       <rect x="12" y="12" width="76" height="76" rx="2" fill="#f7f5fb" stroke="#e27396" stroke-width="2"/>
       <circle cx="50" cy="46" r="6" fill="#ffe169" stroke="#e29578" stroke-width="1.5"/>
       <ellipse cx="50" cy="32" rx="4" ry="8" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
       <ellipse cx="50" cy="60" rx="4" ry="8" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
       <ellipse cx="36" cy="46" rx="8" ry="4" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
       <ellipse cx="64" cy="46" rx="8" ry="4" fill="#fff" stroke="#2b2d42" stroke-width="1"/>
-      <text x="50" y="86" font-family="'Outfit', sans-serif" font-weight="600" font-size="8" fill="#e27396" text-anchor="middle">SWEETHEART</text>
+      <text x="50" y="86" font-family="'Outfit', sans-serif" font-weight="600" font-size="8" fill="#e27396" text-anchor="middle">POST CARD</text>
     </svg>
 
     <!-- STAMP 4: High-Contrast White Postmark -->
     <svg id="stamp-postmark" viewBox="0 0 100 100" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.5">
       <circle cx="50" cy="50" r="32" stroke-dasharray="10 2 2 2"/>
       <circle cx="50" cy="50" r="26" />
-      <text x="50" y="44" font-family="'Playfair Display', serif" font-weight="bold" font-size="6" fill="rgba(255,255,255,0.95)" text-anchor="middle">LOVE POST</text>
+      <text x="50" y="44" font-family="'Playfair Display', serif" font-weight="bold" font-size="6" fill="rgba(255,255,255,0.95)" text-anchor="middle">EXPRESS MAIL</text>
       <text x="50" y="52" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">25 JUL 2026</text>
       <text x="50" y="60" font-family="'Outfit', sans-serif" font-size="5" fill="rgba(255,255,255,0.95)" text-anchor="middle">★ MAIL ★</text>
       <path d="M 5,25 Q 20,30 35,25 T 65,25 T 95,25" />
@@ -247,6 +247,6 @@
 
   </div>
 
-  <script src="app.js?v=60"></script>
+  <script src="app.js?v=70"></script>
 </body>
 </html>

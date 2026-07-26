@@ -781,7 +781,7 @@
     envelopeContainer.removeAttribute('style');
     envelopeContainer.style.display = 'block';
 
-    recipientHelpText.textContent = "You received a letter! Click the envelope to open. 💌";
+    recipientHelpText.textContent = "You received a letter! Click the envelope to open. 📬";
 
     document.getElementById('view-home').classList.remove('active');
     document.getElementById('view-editor').classList.remove('active');
@@ -840,15 +840,15 @@
     input.select();
     input.setSelectionRange(0, 9999);
     navigator.clipboard.writeText(input.value)
-      .then(() => showToast("Copied link! 💌"))
+      .then(() => showToast("Copied link! 📬"))
       .catch(() => showToast("Failed to copy link."));
   }
 
   function emailShareLink() {
     const link = document.getElementById('share-link-input').value;
     const to = document.getElementById('input-to').value.trim() || 'Name Here';
-    const subject = encodeURIComponent("A virtual letter for you! 💌");
-    const body = encodeURIComponent(`Hi ${to},\n\nI wrote and drew a virtual letter for you. Open it here:\n\n${link}\n\nWith love.`);
+    const subject = encodeURIComponent("A virtual letter for you! 📬");
+    const body = encodeURIComponent(`Hi ${to},\n\nI wrote and drew a virtual letter for you. Open it here:\n\n${link}\n\nBest regards.`);
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
   }
 
@@ -973,10 +973,10 @@
         link.download = 'postcard.png';
         link.href = dataUrl;
         link.click();
-        showToast("Downloaded postcard! 💾");
+        showToast("Downloaded letter! 💾");
       } catch (err) {
         console.error("Export error:", err);
-        showToast("Failed to download postcard.");
+        showToast("Failed to download letter.");
       }
     });
   }

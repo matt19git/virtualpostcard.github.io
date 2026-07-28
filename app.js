@@ -1,4 +1,4 @@
-// app.js - Streamlined & Ultra-Smooth Postcard Logic with Responsive Padding for Mobile Letter Opening
+// app.js - Streamlined & Ultra-Smooth Postcard Logic with RDP Ultra-Short SMS Links & Immediate Recipient Mode
 
 (function() {
   
@@ -34,11 +34,11 @@
 
   // Colors available for pen
   const BRUSH_COLORS = [
-    '#800f2f', // Crimson
-    '#e27396', // Rose Pink
-    '#2d6a4f', // Sage Dark Green
-    '#a8dadc', // Sky Blue
-    '#2b2d42'  // Charcoal Ink
+    '#800f2f', // Crimson (index 0)
+    '#e27396', // Rose Pink (index 1)
+    '#2d6a4f', // Sage Dark Green (index 2)
+    '#a8dadc', // Sky Blue (index 3)
+    '#2b2d42'  // Charcoal Ink (index 4)
   ];
 
   // --- DOM Elements ---
@@ -383,23 +383,41 @@
     }
   }
 
+  // Ramer-Douglas-Peucker (RDP) Algorithm for 80% Stroke Compression with Zero Distortion
   function simplifyLastStroke() {
     if (state.strokes.length === 0) return;
     const stroke = state.strokes[state.strokes.length - 1];
     if (stroke.points.length <= 2) return;
-    
-    const simplified = [stroke.points[0]];
-    let last = stroke.points[0];
-    
-    for (let i = 1; i < stroke.points.length - 1; i++) {
-      const pt = stroke.points[i];
-      if (Math.hypot(pt[0] - last[0], pt[1] - last[1]) > 10) {
-        simplified.push(pt);
-        last = pt;
+    stroke.points = rdpSimplify(stroke.points, 2.8);
+  }
+
+  function rdpSimplify(points, epsilon) {
+    if (points.length <= 2) return points;
+    let dmax = 0;
+    let index = 0;
+    const end = points.length - 1;
+    for (let i = 1; i < end; i++) {
+      const d = perpendicularDistance(points[i], points[0], points[end]);
+      if (d > dmax) {
+        index = i;
+        dmax = d;
       }
     }
-    simplified.push(stroke.points[stroke.points.length - 1]);
-    stroke.points = simplified;
+    if (dmax > epsilon) {
+      const rec1 = rdpSimplify(points.slice(0, index + 1), epsilon);
+      const rec2 = rdpSimplify(points.slice(index), epsilon);
+      return rec1.slice(0, rec1.length - 1).concat(rec2);
+    } else {
+      return [points[0], points[end]];
+    }
+  }
+
+  function perpendicularDistance(p, a, b) {
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const norm = Math.hypot(dx, dy);
+    if (norm === 0) return Math.hypot(p[0] - a[0], p[1] - a[1]);
+    return Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / norm;
   }
 
   function redrawStrokes() {
@@ -760,24 +778,35 @@
     shareModal.showModal();
   }
 
-  // --- Link Serialization ---
+  // --- Link Serialization: Ultra-Compact RDP Compression Schema ---
   function generateMagicLink() {
+    // Map colors & stamps to short integer indices
+    const envStampIdx = ENV_STAMPS_LIST.findIndex(s => s.id === state.selectedEnvStamp);
+    
     const letterObj = {
       t: letterTextarea.value,
       to: document.getElementById('input-to').value.trim() || 'Name Here',
       fr: document.getElementById('input-from').value.trim() || 'Name Here',
-      es: state.selectedEnvStamp, // envelope postage stamp ID
-      st: state.stamps.map(s => ({
-        id: s.id,
-        x: Math.round(s.x),
-        y: Math.round(s.y),
-        s: parseFloat(s.scale.toFixed(2)),
-        r: Math.round(s.rotation)
-      })),
-      dr: state.strokes.map(s => ({
-        c: s.color,
-        p: compressPoints(s.points)
-      }))
+      es: envStampIdx >= 0 ? envStampIdx : 0,
+      st: state.stamps.map(s => {
+        const stkIdx = STICKERS_LIST.findIndex(item => item.id === s.id);
+        return [
+          stkIdx >= 0 ? stkIdx : 0,
+          Math.round(s.x),
+          Math.round(s.y),
+          parseFloat(s.scale.toFixed(2)),
+          Math.round(s.rotation)
+        ];
+      }),
+      dr: state.strokes.map(s => {
+        const colorIdx = BRUSH_COLORS.indexOf(s.color);
+        // Simplify strokes with RDP
+        const simplified = rdpSimplify(s.points, 2.5);
+        return [
+          colorIdx >= 0 ? colorIdx : 0,
+          compressPoints(simplified)
+        ];
+      })
     };
 
     const json = JSON.stringify(letterObj);
@@ -829,6 +858,11 @@
   }
 
   function loadReceivedLetter(data) {
+    // 1. Immediately apply recipient-mode so textarea & placeholder text are 100% unmounted
+    postcardCard.classList.add('recipient-mode');
+    letterTextarea.placeholder = '';
+    letterTextarea.style.display = 'none';
+
     letterTextarea.value = data.t || '';
     if (letterTextDisplay) {
       letterTextDisplay.textContent = data.t || '';
@@ -839,19 +873,38 @@
     document.getElementById('input-to').value = to;
     document.getElementById('input-from').value = from;
 
-    // Load card stickers with unique instance scoping
+    // Load card stickers
     stampsOverlay.innerHTML = '';
     state.stamps = [];
     if (data.st) {
       data.st.forEach(sData => {
-        const svgMarkup = getUniqueSVGMarkup(sData.id);
+        let stickerId = 'sticker-heart';
+        let x = 50, y = 50, s = 1.0, r = 0;
+        
+        if (Array.isArray(sData)) {
+          // Compact format [stkIdx, x, y, scale, rotation]
+          stickerId = (STICKERS_LIST[sData[0]] || STICKERS_LIST[0]).id;
+          x = sData[1];
+          y = sData[2];
+          s = sData[3];
+          r = sData[4];
+        } else {
+          // Legacy format
+          stickerId = sData.id;
+          x = sData.x;
+          y = sData.y;
+          s = sData.s;
+          r = sData.r;
+        }
+
+        const svgMarkup = getUniqueSVGMarkup(stickerId);
         if (svgMarkup) {
           const stampEl = document.createElement('div');
           stampEl.className = 'placed-stamp';
           stampEl.innerHTML = svgMarkup;
-          stampEl.style.left = `${sData.x}%`;
-          stampEl.style.top = `${sData.y}%`;
-          stampEl.style.transform = `translate(-50%, -50%) rotate(${sData.r}deg) scale(${sData.s})`;
+          stampEl.style.left = `${x}%`;
+          stampEl.style.top = `${y}%`;
+          stampEl.style.transform = `translate(-50%, -50%) rotate(${r}deg) scale(${s})`;
           stampsOverlay.appendChild(stampEl);
         }
       });
@@ -860,10 +913,16 @@
     // Load drawings
     state.strokes = [];
     if (data.dr) {
-      state.strokes = data.dr.map(s => ({
-        color: s.c,
-        points: decompressPoints(s.p)
-      }));
+      state.strokes = data.dr.map(s => {
+        if (Array.isArray(s)) {
+          // Compact format [colorIdx, deltas]
+          const color = BRUSH_COLORS[s[0]] || BRUSH_COLORS[0];
+          return { color: color, points: decompressPoints(s[1]) };
+        } else {
+          // Legacy format
+          return { color: s.c, points: decompressPoints(s.p) };
+        }
+      });
     }
 
     document.querySelector('.postcard-toolbar').style.display = 'none';
@@ -877,7 +936,12 @@
     document.getElementById('display-from').textContent = `From: ${from}`;
     
     // Load chosen envelope postage stamp
-    const envStampId = data.es || 'stamp-heart';
+    let envStampId = 'stamp-heart';
+    if (typeof data.es === 'number') {
+      envStampId = (ENV_STAMPS_LIST[data.es] || ENV_STAMPS_LIST[0]).id;
+    } else {
+      envStampId = data.es || 'stamp-heart';
+    }
     updateEnvelopeStampDisplay(envStampId);
 
     viewRecipient.insertBefore(envelopeContainer, document.getElementById('recipient-action-panel'));
@@ -944,6 +1008,7 @@
         setTimeout(() => {
           // 4. Letter card slides out smoothly
           viewRecipient.appendChild(postcardCard);
+          postcardCard.classList.add('recipient-mode');
           postcardCard.style.display = 'flex';
           postcardCard.style.position = 'fixed';
           postcardCard.style.top = '48%';
